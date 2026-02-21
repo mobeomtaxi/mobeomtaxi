@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>더칭 배팅 계산기</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  color: #000000;
+  padding: 20px;
+}
+h1 { color: #FFB121; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 15px;
+}
+th, td {
+  border: 1px solid #FFB121;
+  padding: 8px;
+  text-align: center;
+}
+th { background: #FFB121; }
+input[type="number"] { width: 90px; }
+input[type="checkbox"] { transform: scale(1.2); }
+.controls {
+  margin-top: 10px;
+}
+.result {
+  margin-top: 20px;
+  font-size: 16px;
+}
+.warning {
+  color: #ff5252;
+  font-weight: bold;
+}
+.good {
+  color: #4CAF50;
+  font-weight: bold;
+}
+@media (max-width: 600px) {
+  input[type="number"] { width: 70px; }
+}
+</style>
+</head>
+<body>
+
+<h1>더칭 배팅 계산기</h1>
+
+<div class="controls">
+총 배팅 한도:
+<input type="number" id="totalBet" value="315000" step="1000"> 원  
+
+반올림 단위:
+<select id="roundUnit" onchange="calculate()">
+  <option value="1000">천원</option>
+  <option value="10000">만원</option>
+</select>
+</div>
+
+<table>
+<tr>
+  <th>포함</th>
+  <th>번호</th>
+  <th>배당</th>
+  <th>배팅 금액</th>
+</tr>
+
+<script>
+const odds = [2.5, 8, 10, 8, 4.2, 12];
+document.write(odds.map((o,i)=>`
+<tr>
+  <td><input type="checkbox" checked onchange="calculate()"></td>
+  <td>${i+1}</td>
+  <td><input type="number" value="${o}" step="0.01" onchange="calculate()"></td>
+  <td class="bet"></td>
+</tr>`).join(""));
+</script>
+</table>
+
+<div class="result" id="result"></div>
+
+<script>
+function calculate() {
+  const total = Number(totalBet.value);
+  const roundUnit = Number(roundUnitSelect.value || document.getElementById("roundUnit").value);
+  const rows = document.querySelectorAll("table tr");
+  let inverseSum = 0;
+  let activeOdds = [];
+
+  rows.forEach((row,i)=>{
+    if(i===0) return;
+    const chk = row.cells[0].querySelector("input");
+    const odd = Number(row.cells[2].querySelector("input").value);
+    if(chk.checked){
+      inverseSum += 1/odd;
+      activeOdds.push(odd);
+    }
+  });
+
+  const result = document.getElementById("result");
+  if(activeOdds.length === 0){
+    result.innerText = "경기를 하나 이상 선택하세요.";
+    return;
+  }
+
+  const equalReturn = total / inverseSum;
+  let minReturn = Infinity;
+
+  rows.forEach((row,i)=>{
+    if(i===0) return;
+    const chk = row.cells[0].querySelector("input");
+    const odd = Number(row.cells[2].querySelector("input").value);
+    const cell = row.cells[3];
+    if(chk.checked){
+      let bet = equalReturn / odd;
+      bet = Math.round(bet / roundUnit) * roundUnit;
+      cell.innerText = bet.toLocaleString() + " 원";
+      minReturn = Math.min(minReturn, bet * odd);
+    } else {
+      cell.innerText = "-";
+    }
+  });
+
+  const profit = minReturn - total;
+  const status = inverseSum >= 1
+    ? `<span class="warning">⚠ 손실 구조 (역배당 ≥ 1)</span>`
+    : `<span class="good">✔ 수익 구조</span>`;
+
+  result.innerHTML = `
+    ${status}<br>
+    역배당 합: ${inverseSum.toFixed(4)}<br>
+    최소 수령액: ${Math.round(minReturn).toLocaleString()} 원<br>
+    최소 수익: ${Math.round(profit).toLocaleString()} 원
+  `;
+}
+
+const roundUnitSelect = document.getElementById("roundUnit");
+calculate();
+</script>
+
+</body>
+</html>

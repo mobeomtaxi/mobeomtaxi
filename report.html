@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>먹튀제보</title>
+  <style>
+    :root{
+      --brand:#FFB121;
+      --ink:#111;
+      --line:#111;
+      --muted:#555;
+      --soft:#f6f6f6;
+      --card:#fff;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
+    body{background:#ffffff;color:var(--ink);padding:14px;}
+    .wrap{max-width:1100px;margin:0 auto;}
+
+    /* 상단 배너 */
+    .hero{
+      border:2px solid var(--brand);
+      border-radius:14px;
+      overflow:hidden;
+      background:#fff;
+      box-shadow:0 8px 18px rgba(0,0,0,0.06);
+    }
+    .hero-inner{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:18px 18px;
+      gap:14px;
+    }
+    .hero h1{font-size:22px;letter-spacing:-0.2px;}
+    .hero p{margin-top:6px;color:var(--muted);font-size:13px;line-height:1.45;}
+
+    /* ✅ 신고 접수: 배경은 브랜드색 유지, 글씨만 검정 */
+    .hero-badge{
+      background:var(--brand);
+      color:var(--ink); /* ✅ 요청 */
+      font-weight:900;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:12px;
+      white-space:nowrap;
+      border:1px solid rgba(0,0,0,0.15);
+    }
+
+    /* 툴바 */
+    .toolbar{
+      margin-top:12px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    /* 탭 */
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;}
+    .tab{
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid #000;
+      background:#fff;
+      color:#000;
+      cursor:pointer;
+      font-weight:900;
+      font-size:13px;
+      transition:transform .08s ease, background .15s ease;
+    }
+    .tab:active{ transform:scale(0.98); }
+
+    /* 기본 활성 탭(전체)은 테두리/텍스트 브랜드 느낌 */
+    .tab.active{
+      border-color:var(--brand);
+      color:var(--brand);
+    }
+
+    /* ✅ 검증요청 탭만 특별 스타일 */
+    .tab.verify{
+      background:var(--brand);  /* ✅ 요청 */
+      border-color:var(--brand);
+      color:var(--ink);         /* ✅ 요청 */
+    }
+
+    /* 검색 */
+    .search{
+      display:flex;
+      gap:8px;
+      flex:1;
+      min-width:260px;
+    }
+    .search input{
+      flex:1;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid #000;
+      background:#fff;
+      color:#000;
+      outline:none;
+    }
+    .search input:focus{border-color:var(--brand);}
+    .search button{
+      padding:10px 14px;
+      border-radius:10px;
+      border:0;
+      background:var(--brand);
+      font-weight:900;
+      cursor:pointer;
+      color:var(--ink);
+    }
+
+    /* 테이블 */
+    .table-wrap{
+      margin-top:12px;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid #000;
+      background:#fff;
+      box-shadow:0 8px 18px rgba(0,0,0,0.05);
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px;}
+    thead th{
+      text-align:left;
+      padding:12px 12px;
+      font-size:13px;
+      color:#000;
+      background:#fff;
+      border-bottom:1px solid #000;
+      white-space:nowrap;
+    }
+    tbody td{
+      padding:14px 12px;
+      border-bottom:1px solid #e9e9e9;
+      font-size:13px;
+      color:#000;
+      vertical-align:middle;
+    }
+    tbody tr:hover{background:rgba(0, 0, 0, 0.03);}
+    .title{font-weight:900;color:#000;cursor:pointer;}
+    .muted{color:#222;}
+
+    /* pill(분류 배지) - 흰 배경에 어울리게 자연스럽게 */
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:5px 10px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:12px;
+      border:1px solid #000;
+      background:#fff;
+      white-space:nowrap;
+    }
+    .pill.red{
+      border-color:#e53935;
+      color:#e53935;
+      background:rgba(229,57,53,0.08);
+    }
+    .pill.yellow{
+      border-color:var(--brand);
+      color:#000;
+      background:rgba(255,177,33,0.22);
+    }
+    .pill.gray{
+      border-color:#999;
+      color:#333;
+      background:#f1f1f1;
+    }
+
+    /* 페이지네이션 + 글쓰기 */
+    .bottom-bar{
+      margin-top:12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .pager{display:flex;gap:6px;align-items:center;}
+    .pg{
+      border:1px solid #000;
+      background:#fff;
+      color:#000;
+      padding:9px 11px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:900;
+      min-width:38px;
+      transition:background .15s ease;
+    }
+    .pg:hover{ background:#f3f3f3; }
+    .pg.active{
+      background:var(--brand);
+      border-color:var(--brand);
+      color:#000;
+    }
+
+    .write{
+      background:var(--brand);
+      color:#000;
+      border:1px solid rgba(0,0,0,0.2);
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    /* ✅ 하단 안내: 배경/테두리 브랜드색 + 글씨 검정 */
+    .info{
+      margin-top:16px;
+      border-radius:14px;
+      border:2px solid var(--brand);     /* ✅ 요청 */
+      background:var(--brand);           /* ✅ 요청 */
+      padding:16px;
+      color:#000;                        /* ✅ 요청 */
+      box-shadow:0 10px 22px rgba(0,0,0,0.08);
+    }
+    .info h2{font-size:18px;margin-bottom:10px;color:#000;}
+    .info p{color:#000;font-size:13px;line-height:1.55;}
+
+    .info-grid{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    .card{
+      border-radius:14px;
+      border:1px solid rgba(0,0,0,0.35);
+      background:rgba(255,255,255,0.55); /* 브랜드 배경 위에 자연스럽게 */
+      padding:14px;
+      color:#000;
+      backdrop-filter: blur(2px);
+    }
+    .card h3{font-size:15px;margin-bottom:8px;color:#000;}
+    .card ul{margin-left:18px;color:#000;font-size:13px;}
+    .card li{margin:6px 0;}
+
+    /* 반응형 */
+    @media (max-width:900px){
+      body{padding:10px;}
+      .hero-inner{flex-direction:column;align-items:flex-start;}
+      .info-grid{grid-template-columns:1fr;}
+      table{min-width:760px;}
+      .search{min-width:100%;}
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <h1>먹튀신고</h1>
+        <p>
+          먹튀 피해 사례를 공유하고 검증을 요청하세요.<br>
+          증빙(캡처/대화/입출금 내역)이 많을수록 처리 속도가 빨라집니다.
+        </p>
+      </div>
+      <div class="hero-badge">신고 접수</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="tabs">
+      <button class="tab active" type="button">전체</button>
+      <button class="tab" type="button">먹튀</button>
+      <button class="tab verify" type="button">검증요청</button>
+      <button class="tab" type="button">처리완료</button>
+    </div>
+
+    <div class="search">
+      <input type="text" placeholder="사이트명 / 제목 / 내용 검색">
+      <button type="button">검색</button>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:92px;">분류</th>
+          <th>제목</th>
+          <th style="width:140px;">사이트</th>
+          <th style="width:120px;">작성자</th>
+          <th style="width:120px;">작성일</th>
+          <th style="width:80px;">조회</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill red">먹튀</span></td>
+          <td class="title">OO사이트 먹튀 의심 정황 제보합니다</td>
+          <td>OO벳</td>
+          <td class="muted">익명</td>
+          <td class="muted">2026-02-16</td>
+          <td class="muted">12</td>
+        </tr>
+        <tr>
+          <td><span class="pill yellow">검증요청</span></td>
+          <td class="title">신규 사이트 검증 요청드립니다</td>
+          <td>XX카지노</td>
+          <td class="muted">회원A</td>
+          <td class="muted">2026-02-15</td>
+          <td class="muted">44</td>
+        </tr>
+        <tr>
+          <td><span class="pill gray">처리완료</span></td>
+          <td class="title">검토 결과 안내 (완료)</td>
+          <td>YY스포츠</td>
+          <td class="muted">관리자</td>
+          <td class="muted">2026-02-14</td>
+          <td class="muted">98</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="pager">
+      <button class="pg" type="button">«</button>
+      <button class="pg active" type="button">1</button>
+      <button class="pg" type="button">2</button>
+      <button class="pg" type="button">3</button>
+      <button class="pg" type="button">»</button>
+    </div>
+
+    <button class="write" type="button" onclick="alert('글쓰기 기능은 추후 연결하면 됩니다!')">
+      글쓰기
+    </button>
+  </div>
+
+  <div class="info">
+    <h2>먹튀신고 및 먹튀사이트 안내</h2>
+    <p>
+      신고글 작성 시 <b>사이트명/도메인</b>, <b>피해 금액</b>, <b>증빙자료(캡처)</b>, <b>대화 내용</b> 등을 함께 첨부하면
+      검토가 빠르게 진행됩니다. 개인정보(계좌/전화번호 등)는 노출되지 않도록 가려서 업로드하세요.
+    </p>
+
+    <div class="info-grid">
+      <div class="card">
+        <h3>제보 시 필수 항목</h3>
+        <ul>
+          <li>사이트명 / 도메인</li>
+          <li>피해 금액 및 날짜</li>
+          <li>입출금 내역 캡처</li>
+          <li>고객센터 대화 캡처</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>처리 절차</h3>
+        <ul>
+          <li>접수 → 검토 → 결과 안내</li>
+          <li>허위 제보는 제재될 수 있음</li>
+          <li>반복 먹튀는 블랙리스트 등록</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

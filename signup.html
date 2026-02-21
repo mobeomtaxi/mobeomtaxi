@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>회원가입</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
+body{background:#fff;color:#111;padding:18px;}
+
+.wrap{max-width:900px;margin:0 auto;}
+h2{font-size:20px;margin:6px 0 18px 0;}
+
+.form{
+  background:#fff;
+  border-radius:12px;
+  padding:18px;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:140px 1fr;
+  gap:14px;
+  align-items:center;
+  margin-bottom:14px;
+}
+
+.label{
+  font-weight:900;
+  color:#333;
+}
+.req{color:#FFB121;margin-left:4px;font-weight:900;}
+
+.control{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+input{
+  width:100%;
+  padding:12px 12px;
+  border:1px solid #cfd6df;
+  border-radius:10px;
+  font-size:14px;
+  outline:none;
+  background:#fff;
+}
+input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
+
+.small{
+  font-size:12px;
+  color:#555;
+  margin-top:6px;
+  line-height:1.45;
+}
+
+.btn{
+  padding:11px 12px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:900;
+  border:1px solid #cfd6df;
+  background:#fff;
+  color:#111;
+  white-space:nowrap;
+}
+.btn.primary{
+  background:#FFB121;
+  border-color:#FFB121;
+}
+.btn.primary:hover{opacity:.92;}
+
+.msg{
+  margin-top:6px;
+  font-size:12px;
+  font-weight:800;
+}
+.msg.ok{color:#2e7d32;}
+.msg.bad{color:#111; background:rgba(255,177,33,0.18); padding:6px 8px; border-radius:8px; display:inline-block;}
+
+.hr{height:1px;background:#eee;margin:18px 0;}
+
+.captcha-wrap{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.captcha-box{
+  min-width:140px;
+  text-align:center;
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:3px;
+  padding:10px 14px;
+  background:#f3f4f6;
+  border:1px solid #d7dde6;
+  border-radius:10px;
+  user-select:none;
+}
+
+.footer-btn{
+  margin-top:18px;
+}
+.footer-btn .big{
+  width:100%;
+  padding:16px;
+  border-radius:12px;
+  font-size:18px;
+  font-weight:900;
+  border:0;
+  background:#FFB121;
+  cursor:pointer;
+}
+.footer-btn .big:hover{opacity:.92;}
+
+@media (max-width:720px){
+  .row{grid-template-columns:1fr; gap:6px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h2>회원가입</h2>
+
+  <div class="form">
+
+    <!-- 아이디 -->
+    <div class="row">
+      <div class="label">아이디 <span class="req">*</span></div>
+      <div>
+        <div class="control">
+          <input id="userId" type="text" placeholder="아이디" />
+          <button class="btn" type="button" onclick="checkId()">중복체크</button>
+        </div>
+        <div id="idMsg" class="msg"></div>
+      </div>
+    </div>
+
+    <!-- 비번 -->
+    <div class="row">
+      <div class="label">비밀번호 <span class="req">*</span></div>
+      <div>
+        <input id="pw" type="password" placeholder="비밀번호" />
+        <div class="small">비밀번호는 최소 <b>10자 이상</b> 입력하세요.</div>
+        <div id="pwMsg" class="msg"></div>
+      </div>
+    </div>
+
+    <!-- 비번확인 -->
+    <div class="row">
+      <div class="label">비밀번호 확인 <span class="req">*</span></div>
+      <div>
+        <input id="pw2" type="password" placeholder="비밀번호 확인" />
+        <div id="pw2Msg" class="msg"></div>
+      </div>
+    </div>
+
+    <!-- 닉네임 -->
+    <div class="row">
+      <div class="label">닉네임 <span class="req">*</span></div>
+      <div>
+        <input id="nick" type="text" placeholder="닉네임" />
+        <div class="small">공백없이 한글/영문/숫자만 입력 가능</div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <!-- 이메일 -->
+    <div class="row">
+      <div class="label">이메일 <span class="req">*</span></div>
+      <div><input id="email" type="email" placeholder="이메일" /></div>
+    </div>
+
+    <!-- 휴대폰 -->
+    <div class="row">
+      <div class="label">휴대폰 <span class="req">*</span></div>
+      <div class="control">
+        <input id="phone" type="text" placeholder="휴대폰 번호(- 포함)" />
+        <button class="btn" type="button" onclick="alert('인증 기능은 추후 연결')">인증번호 발송</button>
+      </div>
+    </div>
+
+    <!-- 한줄소개 -->
+    <div class="row">
+      <div class="label">한줄 소개 <span class="req">*</span></div>
+      <div><input id="intro" type="text" placeholder="한줄 소개 (20자 이내)" maxlength="20" /></div>
+    </div>
+
+    <div class="hr"></div>
+
+    <!-- 추천인 -->
+    <div class="row">
+      <div class="label">추천인</div>
+      <div><input id="ref" type="text" placeholder="추천인 아이디(없으면 비워두세요)" /></div>
+    </div>
+
+    <!-- 캡차 -->
+    <div class="row">
+      <div class="label">자동등록방지 <span class="req">*</span></div>
+      <div>
+        <div class="captcha-wrap">
+          <div class="captcha-box" id="captchaText"></div>
+          <button class="btn" type="button" onclick="generateCaptcha()">↻</button>
+        </div>
+        <div style="margin-top:10px;">
+          <input id="captchaInput" type="text" placeholder="자동등록방지 문자 입력" />
+          <div id="captchaMsg" class="msg"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-btn">
+      <button class="big" type="button" onclick="submitSignup()">회원가입</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* === 아이디 중복 체크(프론트 시뮬레이션) ===
+   나중에 서버 붙이면 checkId() 안에서 fetch로 바꾸면 됨.
+*/
+const existingIds = new Set(["admin","test","toto","totohot","manager","user01"]);
+let idChecked = false;
+let idOk = false;
+
+function setMsg(el, text, type){
+  el.textContent = text;
+  el.className = "msg " + (type || "");
+}
+
+function checkId(){
+  const id = document.getElementById("userId").value.trim();
+  const msg = document.getElementById("idMsg");
+
+  idChecked = true;
+  idOk = false;
+
+  if(!id){
+    setMsg(msg, "아이디를 입력하세요.", "bad");
+    return;
+  }
+  if(id.length < 4){
+    setMsg(msg, "아이디는 4자 이상 권장합니다.", "bad");
+    return;
+  }
+  if(existingIds.has(id.toLowerCase())){
+    setMsg(msg, "이미 사용 중인 아이디입니다.", "bad");
+    return;
+  }
+  idOk = true;
+  setMsg(msg, "사용 가능한 아이디입니다.", "ok");
+}
+
+// 아이디 바꾸면 다시 체크 필요
+document.getElementById("userId").addEventListener("input", ()=>{
+  idChecked = false;
+  idOk = false;
+  document.getElementById("idMsg").textContent = "";
+});
+
+// 비밀번호 실시간 체크
+document.getElementById("pw").addEventListener("input", ()=>{
+  const pw = document.getElementById("pw").value;
+  const pwMsg = document.getElementById("pwMsg");
+  if(!pw) { pwMsg.textContent=""; return; }
+  if(pw.length < 10) setMsg(pwMsg, "비밀번호는 10자 이상이어야 합니다.", "bad");
+  else setMsg(pwMsg, "좋아요.", "ok");
+  checkPwMatch();
+});
+
+document.getElementById("pw2").addEventListener("input", checkPwMatch);
+
+function checkPwMatch(){
+  const pw = document.getElementById("pw").value;
+  const pw2 = document.getElementById("pw2").value;
+  const el = document.getElementById("pw2Msg");
+  if(!pw2){ el.textContent=""; return; }
+  if(pw !== pw2) setMsg(el, "비밀번호가 일치하지 않습니다.", "bad");
+  else setMsg(el, "비밀번호가 일치합니다.", "ok");
+}
+
+/* 캡차 */
+let captcha = "";
+function generateCaptcha(){
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ2345678923456789";
+  captcha = "";
+  for(let i=0;i<6;i++){
+    captcha += chars[Math.floor(Math.random()*chars.length)];
+  }
+  document.getElementById("captchaText").textContent = captcha;
+  document.getElementById("captchaInput").value = "";
+  document.getElementById("captchaMsg").textContent = "";
+}
+generateCaptcha();
+
+function submitSignup(){
+  const id = document.getElementById("userId").value.trim();
+  const pw = document.getElementById("pw").value;
+  const pw2 = document.getElementById("pw2").value;
+  const nick = document.getElementById("nick").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const intro = document.getElementById("intro").value.trim();
+  const cap = document.getElementById("captchaInput").value.trim();
+  const capMsg = document.getElementById("captchaMsg");
+
+  if(!id){ alert("아이디를 입력하세요."); return; }
+  if(!idChecked || !idOk){ alert("아이디 중복체크를 완료하세요."); return; }
+
+  if(pw.length < 10){ alert("비밀번호는 10자 이상이어야 합니다."); return; }
+  if(pw !== pw2){ alert("비밀번호가 일치하지 않습니다."); return; }
+
+  if(!nick){ alert("닉네임을 입력하세요."); return; }
+  if(!email){ alert("이메일을 입력하세요."); return; }
+  if(!phone){ alert("휴대폰 번호를 입력하세요."); return; }
+  if(!intro){ alert("한줄 소개를 입력하세요."); return; }
+
+  if(cap.toUpperCase() !== captcha){
+    setMsg(capMsg, "자동등록방지 문자가 올바르지 않습니다.", "bad");
+    generateCaptcha();
+    return;
+  }
+
+  alert("회원가입 완료! (서버 연결 전 데모)");
+  // 성공 후 모달 닫기(부모가 있을 때)
+  if(window.parent && window.parent.closeSignup) window.parent.closeSignup();
+}
+</script>
+</body>
+</html>

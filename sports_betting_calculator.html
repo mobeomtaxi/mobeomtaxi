@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>폴더 양빵 계산기</title>
+
+<style>
+body {
+    background: #fdfdfd;
+    color: #000000;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    padding: 20px;
+}
+input, select, button {
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid #333;
+    padding: 6px;
+    border-radius: 6px;
+}
+.row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+button {
+    cursor: pointer;
+}
+.summary {
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+.details {
+    margin-top: 10px;
+    white-space: pre-line;
+    font-size: 14px;
+    color: #000000;
+}
+.warning {
+    color: #ff5555;
+}
+</style>
+</head>
+
+<body>
+
+<h2>폴더 양빵 계산기 (최소손실 / 완전무손실)</h2>
+
+배팅한도(내 돈)
+<input id="limit" type="number" value="300000" max="1000000000">
+
+입플(%)
+<input id="bonus" type="number" value="15" max="100">
+
+3폴더+ 보너스
+<input id="folderBonus" type="number" value="1.03" step="0.01">
+
+반올림 단위
+<select id="roundUnit">
+    <option value="1">1원</option>
+    <option value="1000">1,000원</option>
+    <option value="10000" selected>10,000원</option>
+    <option value="100000">100,000원</option>
+</select>
+
+<br><br>
+
+<label>
+<input type="radio" name="mode" value="safe" checked>
+완전 무손실 (최대 4폴더)
+</label>
+
+<label>
+<input type="radio" name="mode" value="min">
+최소 손실
+</label>
+
+<br><br>
+<button onclick="calculate()">계산하기</button>
+
+<hr>
+
+<div id="games"></div>
+
+<div id="summary" class="summary"></div>
+<div id="details" class="details"></div>
+
+<script>
+const gamesDiv = document.getElementById('games');
+const summary = document.getElementById('summary');
+const details = document.getElementById('details');
+
+for (let i = 1; i <= 10; i++) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.innerHTML = `
+        <input type="checkbox">
+        ${i}번 배당 A <input type="number" step="0.01">
+        배당 B <input type="number" step="0.01">
+    `;
+    gamesDiv.appendChild(row);
+}
+
+function calculate() {
+    summary.innerText = '';
+    details.innerText = '';
+    summary.className = 'summary';
+
+    const limit = Number(document.getElementById('limit').value);
+    const bonusRate = Number(document.getElementById('bonus').value) / 100;
+    const folderBonus = Number(document.getElementById('folderBonus').value);
+    const roundUnit = Number(document.getElementById('roundUnit').value);
+    const mode = document.querySelector('input[name="mode"]:checked').value;
+
+    let selected = [];
+
+    for (const row of gamesDiv.children) {
+        if (!row.querySelector('input[type="checkbox"]').checked) continue;
+        const nums = row.querySelectorAll('input[type="number"]');
+        const a = Number(nums[0].value);
+        const b = Number(nums[1].value);
+        if (a > 1 && b > 1) selected.push({ a, b });
+    }
+
+    const n = selected.length;
+
+    if (n < 2) {
+        summary.innerText = "⚠ 최소 2폴더 이상 선택하세요";
+        summary.classList.add('warning');
+        return;
+    }
+
+    if (mode === "safe" && n > 4) {
+        summary.innerText = "⚠ 완전 무손실 모드는 최대 4폴더까지만 가능합니다";
+        summary.classList.add('warning');
+        return;
+    }
+
+    const cases = Math.pow(2, n);
+
+    // ✅ 1️⃣ 내 돈 기준 조합당 배팅 (반올림 적용)
+    let baseStake = limit / cases;
+    baseStake = Math.round(baseStake / roundUnit) * roundUnit;
+
+    // ✅ 2️⃣ 실제 사이트에 배팅되는 금액 (입플 포함)
+    const betStake = baseStake * (1 + bonusRate);
+
+    // ✅ 3️⃣ 실제 총 지출 (내 돈)
+    const spent = baseStake * cases;
+
+    let returns = [];
+    let combos = [];
+
+    for (let i = 0; i < cases; i++) {
+        let odds = 1;
+        let label = [];
+
+        for (let j = 0; j < n; j++) {
+            if (i & (1 << j)) {
+                odds *= selected[j].a;
+                label.push(`A${j+1}`);
+            } else {
+                odds *= selected[j].b;
+                label.push(`B${j+1}`);
+            }
+        }
+
+        if (n >= 3) odds *= folderBonus;
+
+        returns.push(odds * betStake);
+        combos.push(label.join('-'));
+    }
+
+    const minReturn = Math.min(...returns);
+    const profit = minReturn - spent;
+
+    if (profit < 0 && mode === "safe") {
+        summary.classList.add('warning');
+        summary.innerText = "⚠ 해당 조합은 완전 무손실이 불가능합니다\n";
+    }
+
+    summary.innerText +=
+`선택 폴더 수: ${n}
+총 경우의 수: ${cases}
+조합당 배팅금(내 돈): ${baseStake.toLocaleString()}원
+조합당 실제 배팅금(입플 포함): ${Math.round(betStake).toLocaleString()}원
+총 지출(내 돈): ${spent.toLocaleString()}원
+최소 회수금: ${Math.round(minReturn).toLocaleString()}원
+순이익: ${Math.round(profit).toLocaleString()}원`;
+
+    let text = "조합별 결과\n";
+
+    combos.forEach((c, i) => {
+        const diff = Math.round(returns[i] - spent);
+        text += `${c} → 회수 ${Math.round(returns[i]).toLocaleString()}원 (${diff >= 0 ? '+' : ''}${diff})\n`;
+    });
+
+    details.innerText = text;
+}
+</script>
+
+</body>
+</html>

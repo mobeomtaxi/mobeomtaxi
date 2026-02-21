@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>검증 완료 사이트</title>
+<style>
+  *{ box-sizing:border-box; margin:0; padding:0; font-family:Arial,sans-serif; }
+  body{ background:#fff; padding:10px; }
+
+  h2{ margin:10px 0 15px; }
+
+  .verify-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px,1fr));
+    gap:20px;
+  }
+
+  .card{
+    background:#f8f8f8;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 2px 6px rgba(0,0,0,0.15);
+  }
+
+  .card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    display:block;
+  }
+
+  .card-info{ padding:12px; font-size:14px; }
+
+  .card-info .line{
+    display:flex;
+    gap:10px;
+    padding:6px 0;
+    border-top:1px solid #e6e6e6;
+  }
+  .card-info .line:first-child{ border-top:none; }
+
+  .card-info .label{
+    width:72px;
+    font-weight:bold;
+    color:#222;
+  }
+
+  .card-btns{
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+  }
+
+  .card-btns button{
+    flex:1;
+    padding:10px;
+    border:1px solid #ccc;
+    background:#fff;
+    cursor:pointer;
+    border-radius:6px;
+    font-weight:700;
+  }
+
+  .card-btns .go{
+    border-color:#e53935;
+    color:#e53935;
+  }
+</style>
+</head>
+<body>
+
+<h2>검증 완료 사이트</h2>
+
+<div class="verify-grid">
+
+  <div class="card">
+    <img src="banner1.jpg" alt="배너1">
+    <div class="card-info">
+      <div class="line"><div class="label">사이트 이름</div><div>ES게임</div></div>
+      <div class="line"><div class="label">가입코드</div><div style="color:#e53935;font-weight:800;">HOT</div></div>
+      <div class="card-btns">
+        <button onclick="alert('상세보기 준비중')">상세보기 +</button>
+        <button class="go" onclick="window.open('https://example.com','_blank')">바로가기</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="banner2.jpg" alt="배너2">
+    <div class="card-info">
+      <div class="line"><div class="label">사이트 이름</div><div>라바카라</div></div>
+      <div class="line"><div class="label">가입코드</div><div style="color:#e53935;font-weight:800;">0880</div></div>
+      <div class="card-btns">
+        <button onclick="alert('상세보기 준비중')">상세보기 +</button>
+        <button class="go" onclick="window.open('https://example.com','_blank')">바로가기</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="banner3.jpg" alt="배너3">
+    <div class="card-info">
+      <div class="line"><div class="label">사이트 이름</div><div>마운틴듀</div></div>
+      <div class="line"><div class="label">가입코드</div><div style="color:#e53935;font-weight:800;">자동입력</div></div>
+      <div class="card-btns">
+        <button onclick="alert('상세보기 준비중')">상세보기 +</button>
+        <button class="go" onclick="window.open('https://example.com','_blank')">바로가기</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="banner4.jpg" alt="배너4">
+    <div class="card-info">
+      <div class="line"><div class="label">사이트 이름</div><div>OK 카지노&스포츠</div></div>
+      <div class="line"><div class="label">가입코드</div><div style="color:#e53935;font-weight:800;">HOT</div></div>
+      <div class="card-btns">
+        <button onclick="alert('상세보기 준비중')">상세보기 +</button>
+        <button class="go" onclick="window.open('https://example.com','_blank')">바로가기</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="banner5.jpg" alt="배너5">
+    <div class="card-info">
+      <div class="line"><div class="label">사이트 이름</div><div>환타</div></div>
+      <div class="line"><div class="label">가입코드</div><div style="color:#e53935;font-weight:800;">HOT</div></div>
+      <div class="card-btns">
+        <button onclick="alert('상세보기 준비중')">상세보기 +</button>
+        <button class="go" onclick="window.open('https://example.com','_blank')">바로가기</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="banner6.jpg" alt="배너6">
+    <div class="card-info">
+      <div class="line"><div class="label">사이트 이름</div><div>썬벳</div></div>
+      <div class="line"><div class="label">가입코드</div><div style="color:#e53935;font-weight:800;">HOT</div></div>
+      <div class="card-btns">
+        <button onclick="alert('상세보기 준비중')">상세보기 +</button>
+        <button class="go" onclick="window.open('https://example.com','_blank')">바로가기</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

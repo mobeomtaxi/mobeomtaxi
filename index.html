@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>모범택시</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="site-header">
+
+  <div class="logo" onclick="showPage('home')">
+    <img src="모범택시 로고.png" alt="모범택시 로고">
+  </div>
+
+  <ul class="menu">
+
+    <li class="dropdown">
+      <a href="#" onclick="showPage('sports'); return false;">양빵 프로그램</a>
+      <div class="hover-zone"></div>
+      <ul class="submenu">
+        <li><a href="#" onclick="showPage('sports'); return false;">스포츠 양빵</a></li>
+        <li><a href="#" onclick="showPage('race'); return false;">365 개경주 양빵</a></li>
+      </ul>
+    </li>
+
+    <li><a href="#" onclick="showPage('verify'); return false;">검증 완료 사이트</a></li>
+
+    <li><a href="#" onclick="showPage('report'); return false;">먹튀제보</a></li>
+
+    <li class="dropdown">
+      <a href="#" onclick="showPage('freeboard'); return false;">커뮤니티</a>
+      <div class="hover-zone"></div>
+      <ul class="submenu">
+        <li><a href="#" onclick="showPage('freeboard'); return false;">자유게시판</a></li>
+        <li><a href="#" onclick="showPage('reviewboard'); return false;">후기 게시판</a></li>
+        <li><a href="#" onclick="showPage('humorboard'); return false;">유머 게시판</a></li>
+      </ul>
+    </li>
+
+    <li><a href="#" data-page="analysis">분석존</a></li>
+
+    <li><a href="#" onclick="showPage('home'); return false;">포인트 존</a></li>
+
+  </ul>
+
+</header>
+
+<div class="container">
+
+  <aside class="sidebar">
+    <div class="login-box">
+      <input type="text" placeholder="아이디" class="login-input">
+      <input type="password" placeholder="비밀번호" class="login-input">
+      <button class="login-btn">로그인</button>
+
+      <div class="login-bottom">
+        <label class="auto-login">
+          <input type="checkbox"> 자동로그인
+        </label>
+        <div class="links">
+          <a href="#" onclick="alert('정보찾기 준비중'); return false;">정보찾기</a>
+          ·
+          <a href="#" onclick="openSignup(); return false;">회원가입</a>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <section id="home" class="page active">
+      <div class="banner-grid">
+        <div class="banner">광고 배너 1</div>
+        <div class="banner">광고 배너 2</div>
+        <div class="banner">광고 배너 3</div>
+        <div class="banner">광고 배너 4</div>
+        <div class="banner">광고 배너 5</div>
+        <div class="banner">광고 배너 6</div>
+        <div class="banner">광고 배너 7</div>
+        <div class="banner">광고 배너 8</div>
+        <div class="banner">광고 배너 9</div>
+      </div>
+    </section>
+
+    <section id="sports" class="page">
+      <h2>스포츠 양빵 계산기</h2>
+      <div class="iframe-wrap">
+        <iframe src="sports_betting_calculator.html" title="스포츠 양빵 계산기"></iframe>
+      </div>
+    </section>
+
+    <section id="race" class="page">
+      <h2>365 개경주 양빵 계산기</h2>
+      <div class="iframe-wrap">
+        <iframe src="개경주 양빵.html" title="개경주 양빵 계산기"></iframe>
+      </div>
+    </section>
+
+    <section id="verify" class="page">
+      <h2>검증 완료 사이트</h2>
+      <div class="iframe-wrap">
+        <iframe src="verify_sites.html" title="검증 완료 사이트"></iframe>
+      </div>
+    </section>
+
+    <section id="report" class="page">
+      <h2>먹튀제보</h2>
+      <div class="iframe-wrap">
+        <iframe src="report.html" title="먹튀제보"></iframe>
+      </div>
+    </section>
+
+    <section id="freeboard" class="page">
+      <h2>자유게시판</h2>
+      <div class="iframe-wrap">
+        <iframe src="freeboard.html" title="자유게시판"></iframe>
+      </div>
+    </section>
+
+    <section id="reviewboard" class="page">
+      <h2>후기게시판</h2>
+      <div class="iframe-wrap">
+        <iframe src="reviewboard.html" title="후기게시판"></iframe>
+      </div>
+    </section>
+
+    <section id="humorboard" class="page">
+      <h2>유머게시판</h2>
+      <div class="iframe-wrap">
+        <iframe src="humorboard.html" title="유머게시판"></iframe>
+      </div>
+    </section>
+
+    <section id="analysis" class="page">
+      <h2>분석 게시판</h2>
+      <div class="iframe-wrap">
+        <iframe src="analysisboard.html" title="분석 게시판"></iframe>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-footer">© 2026 모범택시 · All rights reserved.</footer>
+
+<script src="script.js"></script>
+
+<!-- ✅ 회원가입 모달 -->
+<div id="signupModal" class="signup-modal" aria-hidden="true">
+  <div class="signup-backdrop" onclick="closeSignup()"></div>
+
+  <div class="signup-panel" role="dialog" aria-modal="true" aria-label="회원가입">
+    <div class="signup-head">
+      <div class="signup-title">회원가입</div>
+      <button type="button" class="signup-close" onclick="closeSignup()">✕</button>
+    </div>
+
+    <iframe id="signupFrame" class="signup-iframe" src="signup.html" title="회원가입"></iframe>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>후기게시판</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
+body{background:transparent;color:#111;padding:0;}
+.wrap{max-width:none;margin:0;background:transparent;padding:0;}
+
+.board-card{
+  background:#fff;
+  border-radius:12px;
+  padding:18px;
+}
+
+/* 상단 탭 */
+.board-tabs{
+  display:flex;
+  border:2px solid #FFB121;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:14px;
+}
+.board-tabs a{
+  display:block;
+  padding:12px 18px;
+  font-weight:900;
+  cursor:pointer;
+  text-decoration:none;
+  color:#111;
+}
+.board-tabs .active{
+  background:#FFB121;
+}
+
+/* 상단 정보 */
+.board-info{
+  margin:10px 0;
+  font-size:13px;
+  color:#333;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.write-btn{
+  background:#FFB121;
+  border:none;
+  padding:9px 14px;
+  font-weight:900;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+/* 테이블 */
+table{width:100%;border-collapse:collapse;font-size:14px;}
+thead{
+  border-top:2px solid #FFB121;
+  border-bottom:2px solid #FFB121;
+  background:#fafafa;
+}
+th,td{
+  padding:12px 8px;
+  text-align:left;
+  border-bottom:1px solid #ddd;
+}
+tbody tr:hover{background:#fff7e6;}
+.notice{color:#FFB121;font-weight:900;}
+.title{font-weight:900;cursor:pointer;}
+.user{display:flex;align-items:center;gap:6px;}
+
+/* 페이지네이션 */
+.pager{
+  margin-top:16px;
+  display:flex;
+  justify-content:center;
+  gap:6px;
+}
+.pg{
+  padding:8px 12px;
+  border:1px solid #ddd;
+  cursor:pointer;
+  border-radius:8px;
+  background:#fff;
+  font-weight:800;
+}
+.pg.active{
+  background:#FFB121;
+  border-color:#FFB121;
+  font-weight:900;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+  <div class="board-card">
+
+    <div class="board-tabs">
+      <a href="freeboard.html">자유게시판</a>
+      <a class="active" href="reviewboard.html">후기게시판</a>
+      <a href="humorboard.html">유머게시판</a>
+    </div>
+
+    <div class="board-info">
+      <div>전체 <b>18,432</b> / 1 페이지</div>
+      <button class="write-btn" type="button" onclick="alert('후기 글쓰기 준비중')">✎ 글쓰기</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th width="90">번호</th>
+          <th>제목</th>
+          <th width="120">이름</th>
+          <th width="100">날짜</th>
+          <th width="80">조회</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="notice">알림</td>
+          <td class="title">📌 후기 작성 가이드 (필수 양식) +112</td>
+          <td class="user">관리자</td>
+          <td>2026.02.01</td>
+          <td>2841</td>
+        </tr>
+        <tr>
+          <td>18432</td>
+          <td class="title">이번주 신규 사이트 후기 남깁니다 +7</td>
+          <td class="user">회원A</td>
+          <td>23:25</td>
+          <td>12</td>
+        </tr>
+        <tr>
+          <td>18431</td>
+          <td class="title">출금 속도 좋네요 +3</td>
+          <td class="user">회원B</td>
+          <td>23:10</td>
+          <td>8</td>
+        </tr>
+        <tr>
+          <td>18430</td>
+          <td class="title">고객센터 응대 괜찮음 +1</td>
+          <td class="user">회원C</td>
+          <td>22:58</td>
+          <td>5</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pager">
+      <div class="pg">«</div>
+      <div class="pg active">1</div>
+      <div class="pg">2</div>
+      <div class="pg">3</div>
+      <div class="pg">»</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
