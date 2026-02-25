@@ -1,3 +1,5 @@
-export async function onRequestGet() {
-  return new Response("Functions 작동중");
+export async function onRequest(context) {
+  return new Response("OK - Pages Function works!", {
+    headers: { "content-type": "text/plain; charset=utf-8" },
+  });
 }
