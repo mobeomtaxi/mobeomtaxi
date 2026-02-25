@@ -70,6 +70,10 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
   border-color:#FFB121;
 }
 .btn.primary:hover{opacity:.92;}
+.btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
 
 .msg{
   margin-top:6px;
@@ -113,6 +117,10 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
   cursor:pointer;
 }
 .footer-btn .big:hover{opacity:.92;}
+.footer-btn .big:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
 
 @media (max-width:720px){
   .row{grid-template-columns:1fr; gap:6px;}
@@ -131,7 +139,7 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
       <div>
         <div class="control">
           <input id="userId" type="text" placeholder="아이디" />
-          <button class="btn" type="button" onclick="checkId()">중복체크</button>
+          <button id="checkBtn" class="btn" type="button" onclick="checkId()">중복체크</button>
         </div>
         <div id="idMsg" class="msg"></div>
       </div>
@@ -212,56 +220,93 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
     </div>
 
     <div class="footer-btn">
-      <button class="big" type="button" onclick="submitSignup()">회원가입</button>
+      <button id="submitBtn" class="big" type="button" onclick="submitSignup()">회원가입</button>
     </div>
 
   </div>
 </div>
 
 <script>
-/* === 아이디 중복 체크(프론트 시뮬레이션) ===
-   나중에 서버 붙이면 checkId() 안에서 fetch로 바꾸면 됨.
-*/
-const existingIds = new Set(["admin","test","toto","totohot","manager","user01"]);
+/* =========================
+   공통 유틸
+========================= */
 let idChecked = false;
 let idOk = false;
+let lastCheckedId = "";
 
 function setMsg(el, text, type){
   el.textContent = text;
   el.className = "msg " + (type || "");
 }
 
-function checkId(){
+function disable(el, yes){
+  if(!el) return;
+  el.disabled = !!yes;
+}
+
+/* =========================
+   아이디 중복 체크 (서버 연동)
+   GET /api/check-username?username=...
+========================= */
+async function checkId(){
   const id = document.getElementById("userId").value.trim();
   const msg = document.getElementById("idMsg");
+  const btn = document.getElementById("checkBtn");
 
   idChecked = true;
   idOk = false;
+  lastCheckedId = "";
 
   if(!id){
     setMsg(msg, "아이디를 입력하세요.", "bad");
     return;
   }
-  if(id.length < 4){
-    setMsg(msg, "아이디는 4자 이상 권장합니다.", "bad");
+  if(id.length < 3){
+    setMsg(msg, "아이디는 3자 이상 입력하세요.", "bad");
     return;
   }
-  if(existingIds.has(id.toLowerCase())){
-    setMsg(msg, "이미 사용 중인 아이디입니다.", "bad");
-    return;
+
+  disable(btn, true);
+  setMsg(msg, "중복 확인 중...", "");
+
+  try{
+    const res = await fetch(`/api/check-username?username=${encodeURIComponent(id)}`, {
+      method: "GET",
+      headers: { "Accept": "application/json" }
+    });
+
+    const data = await res.json().catch(()=>null);
+
+    if(!res.ok || !data){
+      setMsg(msg, "중복체크 실패(서버 응답 오류)", "bad");
+      return;
+    }
+
+    if(data.available){
+      idOk = true;
+      lastCheckedId = id;
+      setMsg(msg, "사용 가능한 아이디입니다.", "ok");
+    }else{
+      setMsg(msg, "이미 사용 중인 아이디입니다.", "bad");
+    }
+  }catch(e){
+    setMsg(msg, "중복체크 실패(네트워크 오류)", "bad");
+  }finally{
+    disable(btn, false);
   }
-  idOk = true;
-  setMsg(msg, "사용 가능한 아이디입니다.", "ok");
 }
 
 // 아이디 바꾸면 다시 체크 필요
 document.getElementById("userId").addEventListener("input", ()=>{
   idChecked = false;
   idOk = false;
+  lastCheckedId = "";
   document.getElementById("idMsg").textContent = "";
 });
 
-// 비밀번호 실시간 체크
+/* =========================
+   비밀번호 실시간 체크
+========================= */
 document.getElementById("pw").addEventListener("input", ()=>{
   const pw = document.getElementById("pw").value;
   const pwMsg = document.getElementById("pwMsg");
@@ -282,7 +327,9 @@ function checkPwMatch(){
   else setMsg(el, "비밀번호가 일치합니다.", "ok");
 }
 
-/* 캡차 */
+/* =========================
+   캡차
+========================= */
 let captcha = "";
 function generateCaptcha(){
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ2345678923456789";
@@ -296,7 +343,12 @@ function generateCaptcha(){
 }
 generateCaptcha();
 
-function submitSignup(){
+/* =========================
+   회원가입 (서버 연동)
+   POST /api/signup
+========================= */
+async function submitSignup(){
+  const submitBtn = document.getElementById("submitBtn");
   const id = document.getElementById("userId").value.trim();
   const pw = document.getElementById("pw").value;
   const pw2 = document.getElementById("pw2").value;
@@ -304,11 +356,17 @@ function submitSignup(){
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const intro = document.getElementById("intro").value.trim();
+  const recommender = document.getElementById("ref").value.trim();
   const cap = document.getElementById("captchaInput").value.trim();
   const capMsg = document.getElementById("captchaMsg");
 
   if(!id){ alert("아이디를 입력하세요."); return; }
-  if(!idChecked || !idOk){ alert("아이디 중복체크를 완료하세요."); return; }
+
+  // 중복체크는 "현재 입력한 아이디"로 완료돼 있어야 함
+  if(!idChecked || !idOk || lastCheckedId !== id){
+    alert("아이디 중복체크를 완료하세요.");
+    return;
+  }
 
   if(pw.length < 10){ alert("비밀번호는 10자 이상이어야 합니다."); return; }
   if(pw !== pw2){ alert("비밀번호가 일치하지 않습니다."); return; }
@@ -322,11 +380,57 @@ function submitSignup(){
     setMsg(capMsg, "자동등록방지 문자가 올바르지 않습니다.", "bad");
     generateCaptcha();
     return;
+  }else{
+    capMsg.textContent = "";
   }
 
-  alert("회원가입 완료! (서버 연결 전 데모)");
-  // 성공 후 모달 닫기(부모가 있을 때)
-  if(window.parent && window.parent.closeSignup) window.parent.closeSignup();
+  disable(submitBtn, true);
+  submitBtn.textContent = "가입 처리중...";
+
+  try{
+    const res = await fetch("/api/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: id,
+        password: pw,
+        nickname: nick,
+        email,
+        phone,
+        intro,
+        recommender
+      })
+    });
+
+    const data = await res.json().catch(()=>null);
+
+    if(!res.ok || !data){
+      alert("회원가입 실패(서버 응답 오류)");
+      return;
+    }
+    if(!data.ok){
+      alert(data.msg || "회원가입 실패");
+      // 서버가 중복이라면 체크도 다시
+      if(res.status === 409){
+        idChecked = true;
+        idOk = false;
+        setMsg(document.getElementById("idMsg"), "이미 사용 중인 아이디입니다.", "bad");
+      }
+      return;
+    }
+
+    alert("회원가입 완료! 이제 로그인 해주세요.");
+
+    // 성공 후 모달 닫기(부모가 있을 때)
+    if(window.parent && window.parent.closeSignup) window.parent.closeSignup();
+
+  }catch(e){
+    alert("회원가입 실패(네트워크 오류)");
+  }finally{
+    disable(submitBtn, false);
+    submitBtn.textContent = "회원가입";
+    generateCaptcha(); // 보안상 새로고침
+  }
 }
 </script>
 </body>
