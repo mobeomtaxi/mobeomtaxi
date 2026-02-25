@@ -59,3 +59,58 @@ function closeSignup(){
   modal.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";
 }
+
+// 로그인 실행
+async function doLogin() {
+  const username = document.querySelector(".login-input[type='text']").value.trim();
+  const password = document.querySelector(".login-input[type='password']").value;
+
+  const res = await fetch("/api/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password })
+  });
+
+  const data = await res.json();
+  if (!data.ok) return alert(data.msg || "로그인 실패");
+
+  alert(`${data.user.nickname}님 로그인 성공`);
+  await refreshLoginUI();
+}
+
+// 로그인 상태 불러오기
+async function refreshLoginUI() {
+  const res = await fetch("/api/me");
+  if (!res.ok) return;
+
+  const data = await res.json();
+  if (!data.loggedIn) return;
+
+  // 예시: 로그인 박스 아래에 표시
+  let box = document.querySelector(".login-box");
+  let info = document.getElementById("loginInfo");
+  if (!info) {
+    info = document.createElement("div");
+    info.id = "loginInfo";
+    info.style.marginTop = "10px";
+    info.style.fontWeight = "800";
+    box.appendChild(info);
+
+    const btn = document.createElement("button");
+    btn.textContent = "로그아웃";
+    btn.style.marginTop = "8px";
+    btn.className = "login-btn";
+    btn.onclick = doLogout;
+    box.appendChild(btn);
+  }
+  info.textContent = `환영합니다, ${data.user.nickname}님`;
+}
+
+async function doLogout() {
+  await fetch("/api/logout", { method: "POST" });
+  location.reload();
+}
+
+window.addEventListener("load", () => {
+  refreshLoginUI();
+});
