@@ -128,14 +128,15 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
       </div>
     </div>
 
-    <!-- 닉네임 -->
-    <div class="row">
-      <div class="label">닉네임 <span class="req">*</span></div>
-      <div>
-        <input id="nick" type="text" placeholder="닉네임" />
-        <div class="small">공백없이 한글/영문/숫자만 입력 가능</div>
-      </div>
-    </div>
+   <!-- 닉네임 -->
+<div class="row">
+  <div class="label">닉네임 <span class="req">*</span></div>
+  <div>
+    <input id="nick" type="text" placeholder="닉네임" />
+    <div class="small">공백없이 한글/영문/숫자만 입력 가능</div>
+    <div id="nickMsg" class="msg"></div>
+  </div>
+</div>
 
     <div class="hr"></div>
 
@@ -316,6 +317,7 @@ async function submitSignup(){
   if(pw.length < 10){ alert("비밀번호는 10자 이상이어야 합니다."); return; }
   if(pw !== pw2){ alert("비밀번호가 일치하지 않습니다."); return; }
   if(!nick){ alert("닉네임을 입력하세요."); return; }
+  if(!nickOk){ alert("닉네임이 사용 가능한지 확인하세요."); return; }
   if(!email){ alert("이메일을 입력하세요."); return; }
   if(!phone){ alert("휴대폰 번호를 입력하세요."); return; }
   if(!intro){ alert("한줄 소개를 입력하세요."); return; }
@@ -376,7 +378,60 @@ if(!r.ok){
 async function safeJson(res){
   try{ return await res.json(); }catch(e){ return null; }
 }
+
+  // 닉네임 자동 중복 체크(버튼 없음)
+let nickTimer = null;
+let nickOk = false;
+
+function normalizeNick(v){
+  return (v || "").trim();
+}
+
+async function checkNicknameLive() {
+  const nick = normalizeNick(document.getElementById("nick").value);
+  const el = document.getElementById("nickMsg");
+
+  nickOk = false;
+
+  if (!nick) { el.textContent = ""; el.className = "msg"; return; }
+  if (nick.length < 2) { setMsg(el, "닉네임은 2자 이상", "bad"); return; }
+  if (!/^[A-Za-z0-9가-힣]+$/.test(nick)) { setMsg(el, "한글/영문/숫자만 가능", "bad"); return; }
+
+  setMsg(el, "확인 중...", ""); // 로딩 느낌
+
+  try {
+    const r = await fetch(`/api/check-nickname?nickname=${encodeURIComponent(nick)}`, {
+      method: "GET",
+      headers: { "Accept": "application/json" },
+    });
+    const data = await r.json().catch(() => ({}));
+
+    if (!r.ok) {
+      setMsg(el, data.msg || "닉네임 확인 실패", "bad");
+      nickOk = false;
+      return;
+    }
+
+    if (data.available === true) {
+      setMsg(el, data.msg || "사용 가능한 닉네임입니다.", "ok");
+      nickOk = true;
+    } else {
+      setMsg(el, data.msg || "이미 사용 중인 닉네임입니다.", "bad");
+      nickOk = false;
+    }
+  } catch (e) {
+    setMsg(el, "서버 응답 오류", "bad");
+    nickOk = false;
+  }
+}
+
+// 입력할 때마다 서버 때리지 않게 350ms 디바운스
+document.getElementById("nick").addEventListener("input", () => {
+  clearTimeout(nickTimer);
+  nickTimer = setTimeout(checkNicknameLive, 350);
+});
 </script>
 </body>
 </html>
+
 
