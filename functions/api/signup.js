@@ -51,6 +51,8 @@ function json(data, status = 200) {
 
 // PBKDF2 해시(서버에 평문 저장 X)
 async function hashPassword(password) {
+  const ITER = 100000; // ✅ Cloudflare 제한(<=100000)
+
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const key = await crypto.subtle.importKey(
     "raw",
@@ -59,15 +61,18 @@ async function hashPassword(password) {
     false,
     ["deriveBits"]
   );
+
   const bits = await crypto.subtle.deriveBits(
-    { name: "PBKDF2", hash: "SHA-256", salt, iterations: 120000 },
+    { name: "PBKDF2", hash: "SHA-256", salt, iterations: ITER },
     key,
     256
   );
 
   const saltB64 = b64(salt);
   const hashB64 = b64(new Uint8Array(bits));
-  return `pbkdf2$120000$${saltB64}$${hashB64}`;
+
+  // ✅ 포맷 오타 수정: $${...} -> ${...}
+  return `pbkdf2$${ITER}$${saltB64}$${hashB64}`;
 }
 
 function b64(u8) {
