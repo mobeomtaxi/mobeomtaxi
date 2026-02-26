@@ -25,17 +25,10 @@ h2{font-size:20px;margin:6px 0 18px 0;}
   margin-bottom:14px;
 }
 
-.label{
-  font-weight:900;
-  color:#333;
-}
+.label{font-weight:900;color:#333;}
 .req{color:#FFB121;margin-left:4px;font-weight:900;}
 
-.control{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
+.control{display:flex;gap:10px;align-items:center;}
 
 input{
   width:100%;
@@ -48,12 +41,7 @@ input{
 }
 input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
 
-.small{
-  font-size:12px;
-  color:#555;
-  margin-top:6px;
-  line-height:1.45;
-}
+.small{font-size:12px;color:#555;margin-top:6px;line-height:1.45;}
 
 .btn{
   padding:11px 12px;
@@ -65,31 +53,18 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
   color:#111;
   white-space:nowrap;
 }
-.btn.primary{
-  background:#FFB121;
-  border-color:#FFB121;
-}
+.btn.primary{background:#FFB121;border-color:#FFB121;}
 .btn.primary:hover{opacity:.92;}
-.btn:disabled{
-  opacity:.55;
-  cursor:not-allowed;
-}
+.btn:disabled{opacity:.55; cursor:not-allowed;}
 
-.msg{
-  margin-top:6px;
-  font-size:12px;
-  font-weight:800;
-}
+.msg{margin-top:6px;font-size:12px;font-weight:800;}
 .msg.ok{color:#2e7d32;}
-.msg.bad{color:#111; background:rgba(255,177,33,0.18); padding:6px 8px; border-radius:8px; display:inline-block;}
+.msg.bad{color:#111;background:rgba(255,177,33,0.18);padding:6px 8px;border-radius:8px;display:inline-block;}
+.msg.muted{color:#666;font-weight:700;}
 
 .hr{height:1px;background:#eee;margin:18px 0;}
 
-.captcha-wrap{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
+.captcha-wrap{display:flex;gap:10px;align-items:center;}
 .captcha-box{
   min-width:140px;
   text-align:center;
@@ -103,9 +78,7 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
   user-select:none;
 }
 
-.footer-btn{
-  margin-top:18px;
-}
+.footer-btn{margin-top:18px;}
 .footer-btn .big{
   width:100%;
   padding:16px;
@@ -117,10 +90,7 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
   cursor:pointer;
 }
 .footer-btn .big:hover{opacity:.92;}
-.footer-btn .big:disabled{
-  opacity:.55;
-  cursor:not-allowed;
-}
+.footer-btn .big:disabled{opacity:.55; cursor:not-allowed;}
 
 @media (max-width:720px){
   .row{grid-template-columns:1fr; gap:6px;}
@@ -138,7 +108,7 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
       <div class="label">아이디 <span class="req">*</span></div>
       <div>
         <div class="control">
-          <input id="userId" type="text" placeholder="아이디" />
+          <input id="userId" type="text" placeholder="아이디" autocomplete="username" />
           <button id="checkBtn" class="btn" type="button" onclick="checkId()">중복체크</button>
         </div>
         <div id="idMsg" class="msg"></div>
@@ -149,7 +119,7 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
     <div class="row">
       <div class="label">비밀번호 <span class="req">*</span></div>
       <div>
-        <input id="pw" type="password" placeholder="비밀번호" />
+        <input id="pw" type="password" placeholder="비밀번호" autocomplete="new-password" />
         <div class="small">비밀번호는 최소 <b>10자 이상</b> 입력하세요.</div>
         <div id="pwMsg" class="msg"></div>
       </div>
@@ -159,7 +129,7 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
     <div class="row">
       <div class="label">비밀번호 확인 <span class="req">*</span></div>
       <div>
-        <input id="pw2" type="password" placeholder="비밀번호 확인" />
+        <input id="pw2" type="password" placeholder="비밀번호 확인" autocomplete="new-password" />
         <div id="pw2Msg" class="msg"></div>
       </div>
     </div>
@@ -178,15 +148,15 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
     <!-- 이메일 -->
     <div class="row">
       <div class="label">이메일 <span class="req">*</span></div>
-      <div><input id="email" type="email" placeholder="이메일" /></div>
+      <div><input id="email" type="email" placeholder="이메일" autocomplete="email" /></div>
     </div>
 
     <!-- 휴대폰 -->
     <div class="row">
       <div class="label">휴대폰 <span class="req">*</span></div>
       <div class="control">
-        <input id="phone" type="text" placeholder="휴대폰 번호(- 포함)" />
-        <button class="btn" type="button" onclick="alert('인증 기능은 추후 연결')">인증번호 발송</button>
+        <input id="phone" type="text" placeholder="휴대폰 번호(- 포함)" autocomplete="tel" />
+        <button class="btn" type="button" onclick="alert('휴대폰 인증은 추후 연결')">인증번호 발송</button>
       </div>
     </div>
 
@@ -220,42 +190,44 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
     </div>
 
     <div class="footer-btn">
-      <button id="submitBtn" class="big" type="button" onclick="submitSignup()">회원가입</button>
+      <button id="signupBtn" class="big" type="button" onclick="submitSignup()">회원가입</button>
+      <div id="signupMsg" class="msg muted" style="margin-top:10px;"></div>
     </div>
 
   </div>
 </div>
 
 <script>
-/* =========================
-   공통 유틸
-========================= */
+/**
+ * ✅ 중요: API 경로는 항상 절대경로로!
+ * - iframe 안에서 상대경로 쓰면 /signup.html/api/signup 같은 식으로 꼬일 수 있음
+ */
+const API = {
+  checkUsername: "/api/check-username",
+  signup: "/api/signup",
+};
+
 let idChecked = false;
 let idOk = false;
-let lastCheckedId = "";
 
 function setMsg(el, text, type){
-  el.textContent = text;
+  el.textContent = text || "";
   el.className = "msg " + (type || "");
 }
 
-function disable(el, yes){
-  if(!el) return;
-  el.disabled = !!yes;
+function lockUI(locked){
+  const btn1 = document.getElementById("checkBtn");
+  const btn2 = document.getElementById("signupBtn");
+  btn1.disabled = locked;
+  btn2.disabled = locked;
 }
 
-/* =========================
-   아이디 중복 체크 (서버 연동)
-   GET /api/check-username?username=...
-========================= */
 async function checkId(){
   const id = document.getElementById("userId").value.trim();
   const msg = document.getElementById("idMsg");
-  const btn = document.getElementById("checkBtn");
 
   idChecked = true;
   idOk = false;
-  lastCheckedId = "";
 
   if(!id){
     setMsg(msg, "아이디를 입력하세요.", "bad");
@@ -266,33 +238,57 @@ async function checkId(){
     return;
   }
 
-  disable(btn, true);
-  setMsg(msg, "중복 확인 중...", "");
+  setMsg(msg, "확인 중...", "muted");
+  lockUI(true);
 
   try{
-    const res = await fetch(`/api/check-username?username=${encodeURIComponent(id)}`, {
+    // 1) GET 시도: /api/check-username?username=...
+    let r = await fetch(`${API.checkUsername}?username=${encodeURIComponent(id)}`, {
       method: "GET",
-      headers: { "Accept": "application/json" }
+      headers: { "Accept": "application/json" },
     });
 
-    const data = await res.json().catch(()=>null);
+    // 2) 혹시 GET이 막혀있으면 POST로 재시도
+    if(r.status === 405 || r.status === 404){
+      r = await fetch(API.checkUsername, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept":"application/json" },
+        body: JSON.stringify({ username: id }),
+      });
+    }
 
-    if(!res.ok || !data){
-      setMsg(msg, "중복체크 실패(서버 응답 오류)", "bad");
+    const data = await r.json().catch(()=> ({}));
+
+    // 기대값: { ok:true, available:true/false } 또는 { ok:true, exists:true/false }
+    const available = (data.available === true) || (data.exists === false);
+    const taken = (data.available === false) || (data.exists === true);
+
+    if(!r.ok){
+      setMsg(msg, data.msg || "중복체크 실패(서버)", "bad");
+      idOk = false;
       return;
     }
 
-    if(data.available){
-      idOk = true;
-      lastCheckedId = id;
-      setMsg(msg, "사용 가능한 아이디입니다.", "ok");
-    }else{
+    if(taken){
       setMsg(msg, "이미 사용 중인 아이디입니다.", "bad");
+      idOk = false;
+      return;
     }
+
+    // unknown이면 안전하게 available로만 인정
+    if(available || data.ok === true){
+      idOk = true;
+      setMsg(msg, "사용 가능한 아이디입니다.", "ok");
+      return;
+    }
+
+    setMsg(msg, "중복체크 응답을 확인할 수 없습니다.", "bad");
+    idOk = false;
   }catch(e){
-    setMsg(msg, "중복체크 실패(네트워크 오류)", "bad");
+    setMsg(msg, "중복체크 실패(네트워크/서버)", "bad");
+    idOk = false;
   }finally{
-    disable(btn, false);
+    lockUI(false);
   }
 }
 
@@ -300,13 +296,10 @@ async function checkId(){
 document.getElementById("userId").addEventListener("input", ()=>{
   idChecked = false;
   idOk = false;
-  lastCheckedId = "";
   document.getElementById("idMsg").textContent = "";
 });
 
-/* =========================
-   비밀번호 실시간 체크
-========================= */
+// 비밀번호 실시간 체크
 document.getElementById("pw").addEventListener("input", ()=>{
   const pw = document.getElementById("pw").value;
   const pwMsg = document.getElementById("pwMsg");
@@ -315,7 +308,6 @@ document.getElementById("pw").addEventListener("input", ()=>{
   else setMsg(pwMsg, "좋아요.", "ok");
   checkPwMatch();
 });
-
 document.getElementById("pw2").addEventListener("input", checkPwMatch);
 
 function checkPwMatch(){
@@ -327,9 +319,7 @@ function checkPwMatch(){
   else setMsg(el, "비밀번호가 일치합니다.", "ok");
 }
 
-/* =========================
-   캡차
-========================= */
+/* 캡차 */
 let captcha = "";
 function generateCaptcha(){
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ2345678923456789";
@@ -343,16 +333,14 @@ function generateCaptcha(){
 }
 generateCaptcha();
 
-/* =========================
-   회원가입 (서버 연동)
-   POST /api/signup
-========================= */
 async function submitSignup(){
-  const submitBtn = document.getElementById("submitBtn");
-  const id = document.getElementById("userId").value.trim();
-  const pw = document.getElementById("pw").value;
-  const pw2 = document.getElementById("pw2").value;
-  const nick = document.getElementById("nick").value.trim();
+  const signupMsg = document.getElementById("signupMsg");
+  signupMsg.textContent = "";
+
+  const username = document.getElementById("userId").value.trim();
+  const password = document.getElementById("pw").value;
+  const password2 = document.getElementById("pw2").value;
+  const nickname = document.getElementById("nick").value.trim();
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const intro = document.getElementById("intro").value.trim();
@@ -360,18 +348,13 @@ async function submitSignup(){
   const cap = document.getElementById("captchaInput").value.trim();
   const capMsg = document.getElementById("captchaMsg");
 
-  if(!id){ alert("아이디를 입력하세요."); return; }
+  if(!username){ alert("아이디를 입력하세요."); return; }
+  if(!idChecked || !idOk){ alert("아이디 중복체크를 완료하세요."); return; }
 
-  // 중복체크는 "현재 입력한 아이디"로 완료돼 있어야 함
-  if(!idChecked || !idOk || lastCheckedId !== id){
-    alert("아이디 중복체크를 완료하세요.");
-    return;
-  }
+  if(!password || password.length < 10){ alert("비밀번호는 10자 이상이어야 합니다."); return; }
+  if(password !== password2){ alert("비밀번호가 일치하지 않습니다."); return; }
 
-  if(pw.length < 10){ alert("비밀번호는 10자 이상이어야 합니다."); return; }
-  if(pw !== pw2){ alert("비밀번호가 일치하지 않습니다."); return; }
-
-  if(!nick){ alert("닉네임을 입력하세요."); return; }
+  if(!nickname){ alert("닉네임을 입력하세요."); return; }
   if(!email){ alert("이메일을 입력하세요."); return; }
   if(!phone){ alert("휴대폰 번호를 입력하세요."); return; }
   if(!intro){ alert("한줄 소개를 입력하세요."); return; }
@@ -380,56 +363,54 @@ async function submitSignup(){
     setMsg(capMsg, "자동등록방지 문자가 올바르지 않습니다.", "bad");
     generateCaptcha();
     return;
-  }else{
-    capMsg.textContent = "";
   }
 
-  disable(submitBtn, true);
-  submitBtn.textContent = "가입 처리중...";
+  lockUI(true);
+  signupMsg.textContent = "회원가입 처리 중...";
 
   try{
-    const res = await fetch("/api/signup", {
+    const r = await fetch(API.signup, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
       body: JSON.stringify({
-        username: id,
-        password: pw,
-        nickname: nick,
+        username,
+        password,
+        nickname,
         email,
         phone,
         intro,
-        recommender
-      })
+        recommender: recommender || null,
+      }),
     });
 
-    const data = await res.json().catch(()=>null);
+    const data = await r.json().catch(()=> ({}));
 
-    if(!res.ok || !data){
-      alert("회원가입 실패(서버 응답 오류)");
-      return;
-    }
-    if(!data.ok){
-      alert(data.msg || "회원가입 실패");
-      // 서버가 중복이라면 체크도 다시
-      if(res.status === 409){
-        idChecked = true;
-        idOk = false;
-        setMsg(document.getElementById("idMsg"), "이미 사용 중인 아이디입니다.", "bad");
+    if(r.ok && data.ok){
+      alert("회원가입 완료!");
+      if(window.parent && typeof window.parent.closeSignup === "function"){
+        window.parent.closeSignup();
       }
       return;
     }
 
-    alert("회원가입 완료! 이제 로그인 해주세요.");
+    // 서버가 msg 내려주면 그대로 표시
+    const msg = data.msg || `회원가입 실패(HTTP ${r.status})`;
+    alert(msg);
 
-    // 성공 후 모달 닫기(부모가 있을 때)
-    if(window.parent && window.parent.closeSignup) window.parent.closeSignup();
+    // 아이디 중복이면 다시 체크 유도
+    if(r.status === 409){
+      idChecked = false; idOk = false;
+      setMsg(document.getElementById("idMsg"), "중복체크를 다시 해주세요.", "bad");
+    }
 
   }catch(e){
-    alert("회원가입 실패(네트워크 오류)");
+    alert("회원가입 실패(서버 응답 오류)");
   }finally{
-    disable(submitBtn, false);
-    submitBtn.textContent = "회원가입";
-    generateCaptcha(); // 보안상 새로고침
+    signupMsg.textContent = "";
+    lockUI(false);
   }
 }
 </script>
