@@ -80,3 +80,12 @@ function b64(u8) {
   for (const b of u8) s += String.fromCharCode(b);
   return btoa(s);
 }
+
+// 닉네임 중복 체크
+const nickExists = await env.DB.prepare(`SELECT id FROM users WHERE nickname = ?`)
+  .bind(nickname)
+  .first();
+
+if (nickExists) {
+  return json({ ok: false, msg: "이미 사용 중인 닉네임입니다" }, 409);
+}
