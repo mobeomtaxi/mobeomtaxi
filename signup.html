@@ -349,15 +349,14 @@ async function submitSignup(){
 
     const data = await safeJson(r);
 
-    if(!r.ok){
-      // 서버가 보내는 msg 그대로 표시
-      setMsg(submitMsg, data?.msg || "회원가입 실패(서버 응답 오류)", "bad");
-      // 중복이면 다시 체크 유도
-      if(r.status === 409){
-        idChecked = false; idOk = false;
-      }
-      return;
-    }
+if(!r.ok){
+  const more = data?.error ? `\n${data.error}` : "";
+  setMsg(submitMsg, (data?.msg || "회원가입 실패") + more, "bad");
+  if(r.status === 409){
+    idChecked = false; idOk = false;
+  }
+  return;
+}
 
     setMsg(submitMsg, "회원가입 완료!", "ok");
 
@@ -380,3 +379,4 @@ async function safeJson(res){
 </script>
 </body>
 </html>
+
