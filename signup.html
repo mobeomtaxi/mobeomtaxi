@@ -11,11 +11,7 @@ body{background:#fff;color:#111;padding:18px;}
 .wrap{max-width:900px;margin:0 auto;}
 h2{font-size:20px;margin:6px 0 18px 0;}
 
-.form{
-  background:#fff;
-  border-radius:12px;
-  padding:18px;
-}
+.form{background:#fff;border-radius:12px;padding:18px;}
 
 .row{
   display:grid;
@@ -59,8 +55,7 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
 
 .msg{margin-top:6px;font-size:12px;font-weight:800;}
 .msg.ok{color:#2e7d32;}
-.msg.bad{color:#111;background:rgba(255,177,33,0.18);padding:6px 8px;border-radius:8px;display:inline-block;}
-.msg.muted{color:#666;font-weight:700;}
+.msg.bad{color:#111; background:rgba(255,177,33,0.18); padding:6px 8px; border-radius:8px; display:inline-block;}
 
 .hr{height:1px;background:#eee;margin:18px 0;}
 
@@ -102,13 +97,12 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
   <h2>회원가입</h2>
 
   <div class="form">
-
     <!-- 아이디 -->
     <div class="row">
       <div class="label">아이디 <span class="req">*</span></div>
       <div>
         <div class="control">
-          <input id="userId" type="text" placeholder="아이디" autocomplete="username" />
+          <input id="userId" type="text" placeholder="아이디" autocomplete="username"/>
           <button id="checkBtn" class="btn" type="button" onclick="checkId()">중복체크</button>
         </div>
         <div id="idMsg" class="msg"></div>
@@ -119,7 +113,7 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
     <div class="row">
       <div class="label">비밀번호 <span class="req">*</span></div>
       <div>
-        <input id="pw" type="password" placeholder="비밀번호" autocomplete="new-password" />
+        <input id="pw" type="password" placeholder="비밀번호" autocomplete="new-password"/>
         <div class="small">비밀번호는 최소 <b>10자 이상</b> 입력하세요.</div>
         <div id="pwMsg" class="msg"></div>
       </div>
@@ -129,7 +123,7 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
     <div class="row">
       <div class="label">비밀번호 확인 <span class="req">*</span></div>
       <div>
-        <input id="pw2" type="password" placeholder="비밀번호 확인" autocomplete="new-password" />
+        <input id="pw2" type="password" placeholder="비밀번호 확인" autocomplete="new-password"/>
         <div id="pw2Msg" class="msg"></div>
       </div>
     </div>
@@ -148,15 +142,15 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
     <!-- 이메일 -->
     <div class="row">
       <div class="label">이메일 <span class="req">*</span></div>
-      <div><input id="email" type="email" placeholder="이메일" autocomplete="email" /></div>
+      <div><input id="email" type="email" placeholder="이메일" /></div>
     </div>
 
     <!-- 휴대폰 -->
     <div class="row">
       <div class="label">휴대폰 <span class="req">*</span></div>
       <div class="control">
-        <input id="phone" type="text" placeholder="휴대폰 번호(- 포함)" autocomplete="tel" />
-        <button class="btn" type="button" onclick="alert('휴대폰 인증은 추후 연결')">인증번호 발송</button>
+        <input id="phone" type="text" placeholder="휴대폰 번호(- 포함)" />
+        <button class="btn" type="button" onclick="alert('인증 기능은 추후 연결')">인증번호 발송</button>
       </div>
     </div>
 
@@ -190,116 +184,34 @@ input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
     </div>
 
     <div class="footer-btn">
-      <button id="signupBtn" class="big" type="button" onclick="submitSignup()">회원가입</button>
-      <div id="signupMsg" class="msg muted" style="margin-top:10px;"></div>
+      <button id="submitBtn" class="big" type="button" onclick="submitSignup()">회원가입</button>
+      <div id="submitMsg" class="msg" style="margin-top:10px;"></div>
     </div>
-
   </div>
 </div>
 
 <script>
-/**
- * ✅ 중요: API 경로는 항상 절대경로로!
- * - iframe 안에서 상대경로 쓰면 /signup.html/api/signup 같은 식으로 꼬일 수 있음
- */
-const API = {
-  checkUsername: "/api/check-username",
-  signup: "/api/signup",
-};
+/** API base: 같은 도메인/같은 Pages 프로젝트면 상대경로로 OK */
+const API = "/api";
 
-let idChecked = false;
-let idOk = false;
-
+/** 공통 메시지 */
 function setMsg(el, text, type){
   el.textContent = text || "";
   el.className = "msg " + (type || "");
 }
 
-function lockUI(locked){
-  const btn1 = document.getElementById("checkBtn");
-  const btn2 = document.getElementById("signupBtn");
-  btn1.disabled = locked;
-  btn2.disabled = locked;
-}
+/** 상태 */
+let idChecked = false;
+let idOk = false;
 
-async function checkId(){
-  const id = document.getElementById("userId").value.trim();
-  const msg = document.getElementById("idMsg");
-
-  idChecked = true;
-  idOk = false;
-
-  if(!id){
-    setMsg(msg, "아이디를 입력하세요.", "bad");
-    return;
-  }
-  if(id.length < 3){
-    setMsg(msg, "아이디는 3자 이상 입력하세요.", "bad");
-    return;
-  }
-
-  setMsg(msg, "확인 중...", "muted");
-  lockUI(true);
-
-  try{
-    // 1) GET 시도: /api/check-username?username=...
-    let r = await fetch(`${API.checkUsername}?username=${encodeURIComponent(id)}`, {
-      method: "GET",
-      headers: { "Accept": "application/json" },
-    });
-
-    // 2) 혹시 GET이 막혀있으면 POST로 재시도
-    if(r.status === 405 || r.status === 404){
-      r = await fetch(API.checkUsername, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept":"application/json" },
-        body: JSON.stringify({ username: id }),
-      });
-    }
-
-    const data = await r.json().catch(()=> ({}));
-
-    // 기대값: { ok:true, available:true/false } 또는 { ok:true, exists:true/false }
-    const available = (data.available === true) || (data.exists === false);
-    const taken = (data.available === false) || (data.exists === true);
-
-    if(!r.ok){
-      setMsg(msg, data.msg || "중복체크 실패(서버)", "bad");
-      idOk = false;
-      return;
-    }
-
-    if(taken){
-      setMsg(msg, "이미 사용 중인 아이디입니다.", "bad");
-      idOk = false;
-      return;
-    }
-
-    // unknown이면 안전하게 available로만 인정
-    if(available || data.ok === true){
-      idOk = true;
-      setMsg(msg, "사용 가능한 아이디입니다.", "ok");
-      return;
-    }
-
-    setMsg(msg, "중복체크 응답을 확인할 수 없습니다.", "bad");
-    idOk = false;
-  }catch(e){
-    setMsg(msg, "중복체크 실패(네트워크/서버)", "bad");
-    idOk = false;
-  }finally{
-    lockUI(false);
-  }
-}
-
-// 아이디 바꾸면 다시 체크 필요
+/** 아이디 입력 바꾸면 다시 체크 */
 document.getElementById("userId").addEventListener("input", ()=>{
   idChecked = false;
   idOk = false;
   document.getElementById("idMsg").textContent = "";
 });
 
-// 비밀번호 실시간 체크
+/** 비밀번호 체크 */
 document.getElementById("pw").addEventListener("input", ()=>{
   const pw = document.getElementById("pw").value;
   const pwMsg = document.getElementById("pwMsg");
@@ -319,7 +231,7 @@ function checkPwMatch(){
   else setMsg(el, "비밀번호가 일치합니다.", "ok");
 }
 
-/* 캡차 */
+/** 캡차 */
 let captcha = "";
 function generateCaptcha(){
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ2345678923456789";
@@ -333,85 +245,137 @@ function generateCaptcha(){
 }
 generateCaptcha();
 
-async function submitSignup(){
-  const signupMsg = document.getElementById("signupMsg");
-  signupMsg.textContent = "";
+/** 아이디 중복체크: 서버로 확인 */
+async function checkId(){
+  const id = document.getElementById("userId").value.trim();
+  const msg = document.getElementById("idMsg");
+  const btn = document.getElementById("checkBtn");
 
-  const username = document.getElementById("userId").value.trim();
-  const password = document.getElementById("pw").value;
-  const password2 = document.getElementById("pw2").value;
-  const nickname = document.getElementById("nick").value.trim();
+  idChecked = true;
+  idOk = false;
+
+  if(!id){
+    setMsg(msg, "아이디를 입력하세요.", "bad");
+    return;
+  }
+  if(id.length < 3){
+    setMsg(msg, "아이디는 3자 이상이어야 합니다.", "bad");
+    return;
+  }
+
+  btn.disabled = true;
+  setMsg(msg, "확인 중...", "");
+
+  try{
+    const r = await fetch(`${API}/check-username?username=${encodeURIComponent(id)}`, {
+      method: "GET",
+      headers: { "Accept": "application/json" }
+    });
+
+    const data = await safeJson(r);
+    if(!r.ok){
+      setMsg(msg, data?.msg || "중복체크 실패", "bad");
+      return;
+    }
+
+    // 예상 응답: { ok:true, available:true/false, msg:"..." }
+    if(data && data.available === true){
+      idOk = true;
+      setMsg(msg, data.msg || "사용 가능한 아이디입니다.", "ok");
+    }else{
+      setMsg(msg, data.msg || "이미 사용 중인 아이디입니다.", "bad");
+    }
+  }catch(e){
+    setMsg(msg, "서버 응답 오류", "bad");
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+/** 회원가입: 서버로 저장 */
+async function submitSignup(){
+  const id = document.getElementById("userId").value.trim();
+  const pw = document.getElementById("pw").value;
+  const pw2 = document.getElementById("pw2").value;
+  const nick = document.getElementById("nick").value.trim();
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const intro = document.getElementById("intro").value.trim();
   const recommender = document.getElementById("ref").value.trim();
-  const cap = document.getElementById("captchaInput").value.trim();
+  const cap = document.getElementById("captchaInput").value.trim().toUpperCase();
+
   const capMsg = document.getElementById("captchaMsg");
+  const submitMsg = document.getElementById("submitMsg");
+  const submitBtn = document.getElementById("submitBtn");
 
-  if(!username){ alert("아이디를 입력하세요."); return; }
+  setMsg(submitMsg, "", "");
+
+  // 프론트 검증
+  if(!id){ alert("아이디를 입력하세요."); return; }
   if(!idChecked || !idOk){ alert("아이디 중복체크를 완료하세요."); return; }
-
-  if(!password || password.length < 10){ alert("비밀번호는 10자 이상이어야 합니다."); return; }
-  if(password !== password2){ alert("비밀번호가 일치하지 않습니다."); return; }
-
-  if(!nickname){ alert("닉네임을 입력하세요."); return; }
+  if(pw.length < 10){ alert("비밀번호는 10자 이상이어야 합니다."); return; }
+  if(pw !== pw2){ alert("비밀번호가 일치하지 않습니다."); return; }
+  if(!nick){ alert("닉네임을 입력하세요."); return; }
   if(!email){ alert("이메일을 입력하세요."); return; }
   if(!phone){ alert("휴대폰 번호를 입력하세요."); return; }
   if(!intro){ alert("한줄 소개를 입력하세요."); return; }
 
-  if(cap.toUpperCase() !== captcha){
+  if(cap !== captcha){
     setMsg(capMsg, "자동등록방지 문자가 올바르지 않습니다.", "bad");
     generateCaptcha();
     return;
   }
 
-  lockUI(true);
-  signupMsg.textContent = "회원가입 처리 중...";
+  submitBtn.disabled = true;
+  setMsg(submitMsg, "가입 처리 중...", "");
 
   try{
-    const r = await fetch(API.signup, {
+    const r = await fetch(`${API}/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json",
+        "Accept": "application/json"
       },
       body: JSON.stringify({
-        username,
-        password,
-        nickname,
+        username: id,
+        password: pw,
+        nickname: nick,
         email,
         phone,
         intro,
-        recommender: recommender || null,
-      }),
+        recommender
+      })
     });
 
-    const data = await r.json().catch(()=> ({}));
+    const data = await safeJson(r);
 
-    if(r.ok && data.ok){
-      alert("회원가입 완료!");
-      if(window.parent && typeof window.parent.closeSignup === "function"){
-        window.parent.closeSignup();
+    if(!r.ok){
+      // 서버가 보내는 msg 그대로 표시
+      setMsg(submitMsg, data?.msg || "회원가입 실패(서버 응답 오류)", "bad");
+      // 중복이면 다시 체크 유도
+      if(r.status === 409){
+        idChecked = false; idOk = false;
       }
       return;
     }
 
-    // 서버가 msg 내려주면 그대로 표시
-    const msg = data.msg || `회원가입 실패(HTTP ${r.status})`;
-    alert(msg);
+    setMsg(submitMsg, "회원가입 완료!", "ok");
 
-    // 아이디 중복이면 다시 체크 유도
-    if(r.status === 409){
-      idChecked = false; idOk = false;
-      setMsg(document.getElementById("idMsg"), "중복체크를 다시 해주세요.", "bad");
-    }
+    // 모달 닫기(부모 페이지에 closeSignup 있을 때)
+    setTimeout(()=>{
+      if(window.parent && window.parent.closeSignup) window.parent.closeSignup();
+    }, 350);
 
   }catch(e){
-    alert("회원가입 실패(서버 응답 오류)");
+    setMsg(submitMsg, "회원가입 실패(서버 응답 오류)", "bad");
   }finally{
-    signupMsg.textContent = "";
-    lockUI(false);
+    submitBtn.disabled = false;
   }
+}
+
+/** JSON 안전 파서 */
+async function safeJson(res){
+  try{ return await res.json(); }catch(e){ return null; }
 }
 </script>
 </body>
