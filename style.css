@@ -309,8 +309,130 @@ body { background:#f5f5f5; }
   }
 }
 
+:root{
+  --brand:#FFB121;
+  --brand-soft: rgba(255,177,33,.18);
+}
+
+.login-msg{
+  margin-top:10px;
+  font-size:12px;
+  font-weight:800;
+}
+.login-msg.bad{
+  background: var(--brand-soft);
+  padding:8px 10px;
+  border-radius:10px;
+}
+
+.user-panel{
+  background:#fff;
+  border:1px solid #e7e7e7;
+  border-radius:14px;
+  padding:14px;
+  box-shadow:0 4px 14px rgba(0,0,0,.05);
+}
+
+.user-top{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.avatar{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: var(--brand-soft);
+  border:1px solid rgba(255,177,33,.35);
+  font-size:22px;
+}
+
+.user-meta{ flex:1; min-width:0; }
+
+.user-name{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  font-weight:900;
+}
+#userNick{
+  display:inline-block;
+  max-width:140px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.mini-btn{
+  border:1px solid rgba(0,0,0,.1);
+  background:#fff;
+  padding:6px 10px;
+  border-radius:10px;
+  font-weight:900;
+  cursor:pointer;
+}
+.mini-btn:hover{ border-color: var(--brand); }
+
+.user-sub{
+  margin-top:6px;
+  font-size:12px;
+  color:#444;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--brand);
+}
+.sep{opacity:.6;}
+.badge{font-weight:900;color:#111;}
+
+.user-icons{
+  margin-top:12px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.icon-btn{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  border:1px solid rgba(0,0,0,.1);
+  background:#fff;
+  cursor:pointer;
+  font-size:16px;
+}
+.icon-btn:hover{
+  border-color: var(--brand);
+  box-shadow:0 0 0 3px var(--brand-soft);
+}
+.icon-btn.home{
+  border-color: rgba(255,177,33,.6);
+  background: var(--brand-soft);
+}
+
+.logout-btn{
+  margin-top:12px;
+  width:100%;
+  border:0;
+  background: var(--brand);
+  padding:12px;
+  border-radius:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+.logout-btn:hover{ opacity:.92; }
+
 /* ✅ 페이지 전환이 CSS에 먹히게 강제 */
 .page { display: none; }
 .page.active { display: block !important; }
 
 .hover-zone{ pointer-events:none; }
+
