@@ -17,11 +17,7 @@ function showPage(id) {
   location.hash = id;
 }
 
-window.addEventListener('load', () => {
-  const page = (location.hash || '#home').replace('#', '').trim();
-  showPage(page || 'home');
-});
-
+/* data-page="xxx" 링크 지원(선택) */
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[data-page]');
   if (!a) return;
@@ -56,6 +52,33 @@ function closeSignup(){
 ========================= */
 const API = "/api";
 
+/** 로그인 버튼/엔터 자동 연결 */
+function bindLoginEvents(){
+  const idInput = document.querySelector(".login-input[type='text']");
+  const pwInput = document.querySelector(".login-input[type='password']");
+  const loginBtn = document.querySelector(".login-box .login-btn"); // 첫번째 버튼
+
+  if (loginBtn) {
+    // 혹시 기존 onclick이 없어도 무조건 연결
+    loginBtn.type = "button";
+    loginBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      doLogin();
+    });
+  }
+
+  // 엔터로 로그인
+  [idInput, pwInput].forEach((el) => {
+    if (!el) return;
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        doLogin();
+      }
+    });
+  });
+}
+
 async function doLogin() {
   const username = document.querySelector(".login-input[type='text']")?.value.trim() || "";
   const password = document.querySelector(".login-input[type='password']")?.value || "";
@@ -66,66 +89,91 @@ async function doLogin() {
   const res = await fetch(`${API}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "Accept": "application/json" },
-    credentials: "include", // ✅ 세션 쿠키 포함
+    credentials: "include", // ✅ 쿠키 세션 포함 (중요)
     body: JSON.stringify({ username, password })
   });
 
   const data = await res.json().catch(() => null);
-  if (!res.ok || !data?.ok) return alert(data?.msg || "로그인 실패");
+
+  if (!res.ok || !data?.ok) {
+    return alert(data?.msg || "로그인 실패");
+  }
 
   alert(`${data.user?.nickname || data.user?.username || "회원"}님 로그인 성공`);
-  await refreshLoginUI();
+
+  // ✅ 로그인 직후 /api/me 재확인해서 UI 반영
+  await refreshLoginUI(true);
 }
 
-async function refreshLoginUI() {
+async function refreshLoginUI(showAlertOn401 = false) {
   try{
     const res = await fetch(`${API}/me`, {
       method: "GET",
       headers: { "Accept": "application/json" },
-      credentials: "include" // ✅ 세션 쿠키 포함
+      credentials: "include" // ✅ 쿠키 세션 포함 (중요)
     });
 
-    const data = await res.json().catch(() => null);
-
-    // ✅ me.js 스펙: { ok, loggedIn, user }
-    if (!res.ok || !data?.ok || !data?.loggedIn) {
-      // 로그아웃 상태: 기존 안내/버튼 제거
-      const info = document.getElementById("loginInfo");
-      if (info) info.remove();
-      const logoutBtn = document.getElementById("logoutBtn");
-      if (logoutBtn) logoutBtn.remove();
+    // 401이면 쿠키가 없거나 세션이 없다는 뜻
+    if (res.status === 401) {
+      if (showAlertOn401) {
+        alert("로그인은 됐는데 세션 쿠키가 저장되지 않았습니다. (Set-Cookie 확인 필요)");
+      }
+      setLoggedOutUI();
       return;
     }
 
-    const nickname = data.user?.nickname || data.user?.username || "회원";
+    const data = await res.json().catch(() => null);
 
-    const box = document.querySelector(".login-box");
-    if (!box) return;
-
-    let info = document.getElementById("loginInfo");
-    if (!info) {
-      info = document.createElement("div");
-      info.id = "loginInfo";
-      info.style.marginTop = "10px";
-      info.style.fontWeight = "800";
-      box.appendChild(info);
+    if (!res.ok || !data?.ok || !data?.loggedIn) {
+      setLoggedOutUI();
+      return;
     }
-    info.textContent = `환영합니다, ${nickname}님`;
 
-    let btn = document.getElementById("logoutBtn");
-    if (!btn) {
-      btn = document.createElement("button");
-      btn.id = "logoutBtn";
-      btn.textContent = "로그아웃";
-      btn.style.marginTop = "8px";
-      btn.className = "login-btn";
-      btn.type = "button";
-      btn.onclick = doLogout;
-      box.appendChild(btn);
-    }
+    setLoggedInUI(data.user);
+
   }catch(e){
     console.warn("refreshLoginUI error:", e);
+    setLoggedOutUI();
   }
+}
+
+function setLoggedInUI(user){
+  const nickname = user?.nickname || user?.username || "회원";
+
+  const box = document.querySelector(".login-box");
+  if (!box) return;
+
+  // ✅ 기존 안내/로그아웃 버튼 만들기
+  let info = document.getElementById("loginInfo");
+  if (!info) {
+    info = document.createElement("div");
+    info.id = "loginInfo";
+    info.style.marginTop = "10px";
+    info.style.fontWeight = "900";
+    box.appendChild(info);
+  }
+  info.textContent = `환영합니다, ${nickname}님`;
+
+  let btn = document.getElementById("logoutBtn");
+  if (!btn) {
+    btn = document.createElement("button");
+    btn.id = "logoutBtn";
+    btn.textContent = "로그아웃";
+    btn.style.marginTop = "8px";
+    btn.className = "login-btn";
+    btn.type = "button";
+    btn.addEventListener("click", doLogout);
+    box.appendChild(btn);
+  }
+}
+
+function setLoggedOutUI(){
+  // 로그인 안내/로그아웃 버튼 제거
+  const info = document.getElementById("loginInfo");
+  if (info) info.remove();
+
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) logoutBtn.remove();
 }
 
 async function doLogout() {
@@ -136,6 +184,16 @@ async function doLogout() {
   location.reload();
 }
 
-window.addEventListener("load", () => {
-  refreshLoginUI();
+
+/* =========================
+   최초 실행
+========================= */
+window.addEventListener("load", async () => {
+  // 새로고침/첫 진입 시 현재 페이지 유지
+  const page = (location.hash || '#home').replace('#', '').trim();
+  showPage(page || 'home');
+
+  // 로그인 이벤트 연결 + 로그인 상태 갱신
+  bindLoginEvents();
+  await refreshLoginUI(false);
 });
