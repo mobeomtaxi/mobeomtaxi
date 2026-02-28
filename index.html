@@ -25,7 +25,6 @@
     </li>
 
     <li><a href="#" onclick="showPage('verify'); return false;">검증 완료 사이트</a></li>
-
     <li><a href="#" onclick="showPage('report'); return false;">먹튀제보</a></li>
 
     <li class="dropdown">
@@ -38,6 +37,7 @@
       </ul>
     </li>
 
+    <!-- ✅ data-page 방식 -->
     <li><a href="#" data-page="analysis">분석존</a></li>
 
     <li><a href="#" onclick="showPage('home'); return false;">포인트 존</a></li>
@@ -50,55 +50,60 @@
 
   <aside class="sidebar">
 
-  <!-- ✅ 로그인 전 박스 -->
-  <div id="loginBox" class="login-box">
-    <input id="loginId" type="text" placeholder="아이디" class="login-input" autocomplete="username">
-    <input id="loginPw" type="password" placeholder="비밀번호" class="login-input" autocomplete="current-password">
-    <button class="login-btn" type="button" onclick="doLogin()">로그인</button>
+    <!-- ✅ 로그인 폼 (로그아웃 상태에서만 보임) -->
+    <div id="loginForm" class="login-box">
+      <input id="loginUsername" type="text" placeholder="아이디" class="login-input" autocomplete="username">
+      <input id="loginPassword" type="password" placeholder="비밀번호" class="login-input" autocomplete="current-password">
+      <button class="login-btn" type="button" onclick="doLogin()">로그인</button>
 
-    <div class="login-bottom">
-      <label class="auto-login">
-        <input type="checkbox"> 자동로그인
-      </label>
-      <div class="links">
-        <a href="#">정보찾기</a> · <a href="javascript:void(0)" onclick="openSignup()">회원가입</a>
-      </div>
-    </div>
-
-    <div id="loginMsg" class="login-msg"></div>
-  </div>
-
-<!-- 로그인 후 패널 (처음엔 숨김) -->
-<div id="userPanel" style="display:none; margin-top:12px;">
-  <div id="userCard" class="user-card">
-    <div class="user-top">
-      <div class="avatar">👤</div>
-      <div class="meta">
-        <div id="userNick" class="nick">-</div>
-        <div class="sub">
-          <span id="userLevel">일반회원</span> ·
-          포인트: <b id="userPoint">0</b>
+      <div class="login-bottom">
+        <label class="auto-login">
+          <input type="checkbox"> 자동로그인
+        </label>
+        <div class="links">
+          <a href="#">정보찾기</a> · <a href="javascript:void(0)" onclick="openSignup()">회원가입</a>
         </div>
       </div>
+
+      <div id="loginMsg" class="login-msg"></div>
     </div>
 
-    <div class="user-actions">
-      <button type="button" class="icon-btn">🔔</button>
-      <button type="button" class="icon-btn">✉️</button>
-      <button type="button" class="icon-btn">👥</button>
-      <button type="button" class="icon-btn">⚙️</button>
-      <button type="button" class="icon-btn" onclick="showPage('home')">🏠</button>
+    <!-- ✅ 로그인 후 유저 패널 (처음엔 숨김) -->
+    <div id="userPanel" class="login-box" style="display:none; margin-top:12px;">
+      <div class="user-top">
+        <div class="avatar"></div>
+
+        <div class="user-meta">
+          <div class="user-nick">
+            <span id="userNick">-</span><span class="badge">로그인</span>
+          </div>
+          <div class="user-id" id="userIdText">-</div>
+        </div>
+
+        <button class="mini-btn" type="button" onclick="doLogout()">로그아웃</button>
+      </div>
+
+      <div class="user-stats">
+        <div class="stat">
+          <div class="stat-label">회원등급</div>
+          <div class="stat-value" id="userLevel">일반회원</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">포인트</div>
+          <div class="stat-value"><span class="coin">🪙</span> <span id="userPoint">0</span></div>
+        </div>
+      </div>
+
+      <div class="user-icons">
+        <button class="icon-btn" type="button" title="알림">🔔</button>
+        <button class="icon-btn" type="button" title="쪽지">✉️</button>
+        <button class="icon-btn" type="button" title="마이">👤</button>
+        <button class="icon-btn" type="button" title="설정">⚙️</button>
+        <button class="icon-btn" type="button" title="홈" onclick="showPage('home')">🏠</button>
+      </div>
     </div>
 
-    <button id="logoutBtn" type="button" class="login-btn" onclick="doLogout()">로그아웃</button>
-  </div>
-</div>
-
-    <div id="loginPanel">
-  <!-- 아이디/비번 input + 로그인버튼 + 자동로그인 + 정보찾기/회원가입 -->
-</div>
-
-</aside>
+  </aside>
 
   <main class="main">
 
@@ -195,8 +200,3 @@
 
 </body>
 </html>
-
-
-
-
-
