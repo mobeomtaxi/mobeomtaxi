@@ -5,7 +5,6 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
 
   const el = document.getElementById(id);
-
   if (!el) {
     console.warn('[showPage] 섹션 없음:', id);
     document.getElementById('home')?.classList.add('active');
@@ -17,7 +16,7 @@ function showPage(id) {
   location.hash = id;
 }
 
-/* data-page="xxx" 링크 지원(선택) */
+/* data-page="xxx" 링크 지원 */
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[data-page]');
   if (!a) return;
@@ -32,7 +31,6 @@ document.addEventListener('click', (e) => {
 function openSignup(){
   const modal = document.getElementById("signupModal");
   const frame = document.getElementById("signupFrame");
-
   if (frame) frame.src = "signup.html";
   modal.style.display = "block";
   modal.setAttribute("aria-hidden", "false");
@@ -48,18 +46,83 @@ function closeSignup(){
 
 
 /* =========================
-   로그인/로그아웃
+   로그인/로그아웃 + UI 토글
 ========================= */
 const API = "/api";
 
-/** 로그인 버튼/엔터 자동 연결 */
+/** DOM */
+function $id(id){ return document.getElementById(id); }
+
+function getLoginInputs(){
+  return {
+    idInput: $id("loginId"),
+    pwInput: $id("loginPw"),
+    loginBtn: document.querySelector("#loginBox .login-btn"),
+    msg: $id("loginMsg"),
+  };
+}
+
+/** 메시지 */
+function setLoginMsg(text, type){
+  const { msg } = getLoginInputs();
+  if (!msg) return;
+  msg.textContent = text || "";
+  msg.className = "login-msg" + (type ? " " + type : "");
+}
+
+/** 로그인 UI <-> 유저패널 UI 전환 */
+function showLoggedInPanel(user){
+  const loginBox = $id("loginBox");
+  const userPanel = $id("userPanel");
+  if (loginBox) loginBox.style.display = "none";
+  if (userPanel) userPanel.style.display = "block";
+
+  // 유저 정보 바인딩
+  const nickname = user?.nickname || user?.username || "회원";
+  const level = "일반회원"; // 지금은 고정(나중에 DB에서 꺼내면 됨)
+  const point = 0;         // 지금은 고정(나중에 points 테이블 만들면 됨)
+
+  const nickEl = $id("userNick");
+  const levelEl = $id("userLevel");
+  const pointEl = $id("userPoint");
+
+  if (nickEl) nickEl.textContent = `${nickname}님`;
+  if (levelEl) levelEl.textContent = level;
+  if (pointEl) pointEl.textContent = point;
+
+  // 로그인 입력값/메시지 정리
+  const { idInput, pwInput } = getLoginInputs();
+  if (idInput) idInput.value = "";
+  if (pwInput) pwInput.value = "";
+  setLoginMsg("", "");
+}
+
+function showLoggedOutPanel(){
+  const loginBox = $id("loginBox");
+  const userPanel = $id("userPanel");
+  if (loginBox) loginBox.style.display = "block";
+  if (userPanel) userPanel.style.display = "none";
+
+  // 유저패널 값 초기화
+  const nickEl = $id("userNick");
+  const levelEl = $id("userLevel");
+  const pointEl = $id("userPoint");
+  if (nickEl) nickEl.textContent = "-";
+  if (levelEl) levelEl.textContent = "일반회원";
+  if (pointEl) pointEl.textContent = "0";
+
+  // 로그인 메시지/입력 초기화
+  const { idInput, pwInput } = getLoginInputs();
+  if (idInput) idInput.value = "";
+  if (pwInput) pwInput.value = "";
+  setLoginMsg("", "");
+}
+
+/** 로그인 버튼/엔터 연결 */
 function bindLoginEvents(){
-  const idInput = document.querySelector(".login-input[type='text']");
-  const pwInput = document.querySelector(".login-input[type='password']");
-  const loginBtn = document.querySelector(".login-box .login-btn"); // 첫번째 버튼
+  const { idInput, pwInput, loginBtn } = getLoginInputs();
 
   if (loginBtn) {
-    // 혹시 기존 onclick이 없어도 무조건 연결
     loginBtn.type = "button";
     loginBtn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -67,7 +130,6 @@ function bindLoginEvents(){
     });
   }
 
-  // 엔터로 로그인
   [idInput, pwInput].forEach((el) => {
     if (!el) return;
     el.addEventListener("keydown", (e) => {
@@ -79,121 +141,87 @@ function bindLoginEvents(){
   });
 }
 
+/** 로그인 */
 async function doLogin() {
-  const username = document.querySelector(".login-input[type='text']")?.value.trim() || "";
-  const password = document.querySelector(".login-input[type='password']")?.value || "";
+  const { idInput, pwInput } = getLoginInputs();
+  const username = (idInput?.value || "").trim();
+  const password = pwInput?.value || "";
 
-  if (!username) return alert("아이디를 입력하세요.");
-  if (!password) return alert("비밀번호를 입력하세요.");
+  if (!username) return setLoginMsg("아이디를 입력하세요.", "bad");
+  if (!password) return setLoginMsg("비밀번호를 입력하세요.", "bad");
+
+  setLoginMsg("로그인 중...", "");
 
   const res = await fetch(`${API}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "Accept": "application/json" },
-    credentials: "include", // ✅ 쿠키 세션 포함 (중요)
+    credentials: "include",
     body: JSON.stringify({ username, password })
   });
 
   const data = await res.json().catch(() => null);
 
   if (!res.ok || !data?.ok) {
-    return alert(data?.msg || "로그인 실패");
+    setLoginMsg(data?.msg || "로그인 실패", "bad");
+    return;
   }
 
-  alert(`${data.user?.nickname || data.user?.username || "회원"}님 로그인 성공`);
+  // ✅ 바로 UI 전환 (login 응답에 user가 있으니)
+  showLoggedInPanel(data.user);
 
-  // ✅ 로그인 직후 /api/me 재확인해서 UI 반영
-  await refreshLoginUI(true);
+  // 그래도 한 번 더 /me 확인해서 세션 정상인지 체크
+  await refreshLoginUI(false);
 }
 
-async function refreshLoginUI(showAlertOn401 = false) {
+/** 세션 확인 */
+async function refreshLoginUI(alertOn401 = false) {
   try{
     const res = await fetch(`${API}/me`, {
       method: "GET",
       headers: { "Accept": "application/json" },
-      credentials: "include" // ✅ 쿠키 세션 포함 (중요)
+      credentials: "include"
     });
 
-    // 401이면 쿠키가 없거나 세션이 없다는 뜻
     if (res.status === 401) {
-      if (showAlertOn401) {
-        alert("로그인은 됐는데 세션 쿠키가 저장되지 않았습니다. (Set-Cookie 확인 필요)");
-      }
-      setLoggedOutUI();
+      if (alertOn401) alert("세션이 없습니다(401). 쿠키/Set-Cookie 확인 필요");
+      showLoggedOutPanel();
       return;
     }
 
     const data = await res.json().catch(() => null);
-
     if (!res.ok || !data?.ok || !data?.loggedIn) {
-      setLoggedOutUI();
+      showLoggedOutPanel();
       return;
     }
 
-    setLoggedInUI(data.user);
-
+    showLoggedInPanel(data.user);
   }catch(e){
     console.warn("refreshLoginUI error:", e);
-    setLoggedOutUI();
+    showLoggedOutPanel();
   }
 }
 
-function setLoggedInUI(user){
-  const nickname = user?.nickname || user?.username || "회원";
-
-  const box = document.querySelector(".login-box");
-  if (!box) return;
-
-  // ✅ 기존 안내/로그아웃 버튼 만들기
-  let info = document.getElementById("loginInfo");
-  if (!info) {
-    info = document.createElement("div");
-    info.id = "loginInfo";
-    info.style.marginTop = "10px";
-    info.style.fontWeight = "900";
-    box.appendChild(info);
-  }
-  info.textContent = `환영합니다, ${nickname}님`;
-
-  let btn = document.getElementById("logoutBtn");
-  if (!btn) {
-    btn = document.createElement("button");
-    btn.id = "logoutBtn";
-    btn.textContent = "로그아웃";
-    btn.style.marginTop = "8px";
-    btn.className = "login-btn";
-    btn.type = "button";
-    btn.addEventListener("click", doLogout);
-    box.appendChild(btn);
-  }
-}
-
-function setLoggedOutUI(){
-  // 로그인 안내/로그아웃 버튼 제거
-  const info = document.getElementById("loginInfo");
-  if (info) info.remove();
-
-  const logoutBtn = document.getElementById("logoutBtn");
-  if (logoutBtn) logoutBtn.remove();
-}
-
+/** 로그아웃 */
 async function doLogout() {
   await fetch(`${API}/logout`, {
     method: "POST",
     credentials: "include"
   }).catch(()=>{});
-  location.reload();
-}
 
+  // ✅ UI 즉시 초기화 (새로고침 없이도 깔끔)
+  showLoggedOutPanel();
+
+  // 원하면 홈으로 이동
+  showPage("home");
+}
 
 /* =========================
    최초 실행
 ========================= */
 window.addEventListener("load", async () => {
-  // 새로고침/첫 진입 시 현재 페이지 유지
   const page = (location.hash || '#home').replace('#', '').trim();
   showPage(page || 'home');
 
-  // 로그인 이벤트 연결 + 로그인 상태 갱신
   bindLoginEvents();
   await refreshLoginUI(false);
 });
