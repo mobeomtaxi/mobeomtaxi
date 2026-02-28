@@ -68,37 +68,35 @@
     <div id="loginMsg" class="login-msg"></div>
   </div>
 
-  <!-- ✅ 로그인 후 패널 (왼쪽 위 스타일) -->
-  <div id="userPanel" class="user-panel" style="display:none;">
+<!-- 로그인 후 패널 (처음엔 숨김) -->
+<div id="userPanel" style="display:none; margin-top:12px;">
+  <div id="userCard" class="user-card">
     <div class="user-top">
       <div class="avatar">👤</div>
-
-      <div class="user-meta">
-        <div class="user-name">
-          <span id="userNick">닉네임</span>
-          <button class="mini-btn" type="button" onclick="goMyPage()">내정보</button>
-        </div>
-
-        <div class="user-sub">
-          <span class="dot"></span>
-          <span id="userGrade">일반회원</span>
-          <span class="sep">·</span>
-          <span class="badge">포인트:</span>
-          <span id="userPoint">0</span>
+      <div class="meta">
+        <div id="userNick" class="nick">-</div>
+        <div class="sub">
+          <span id="userLevel">일반회원</span> ·
+          포인트: <b id="userPoint">0</b>
         </div>
       </div>
     </div>
 
-    <div class="user-icons">
-      <button class="icon-btn" title="알림" type="button">🔔</button>
-      <button class="icon-btn" title="쪽지" type="button">✉️</button>
-      <button class="icon-btn" title="내글" type="button">📝</button>
-      <button class="icon-btn" title="설정" type="button">⚙️</button>
-      <button class="icon-btn home" title="홈" type="button" onclick="showPage('home')">🏠</button>
+    <div class="user-actions">
+      <button type="button" class="icon-btn">🔔</button>
+      <button type="button" class="icon-btn">✉️</button>
+      <button type="button" class="icon-btn">👥</button>
+      <button type="button" class="icon-btn">⚙️</button>
+      <button type="button" class="icon-btn" onclick="showPage('home')">🏠</button>
     </div>
 
-    <button class="logout-btn" type="button" onclick="doLogout()">로그아웃</button>
+    <button id="logoutBtn" type="button" class="login-btn" onclick="doLogout()">로그아웃</button>
   </div>
+</div>
+
+    <div id="loginPanel">
+  <!-- 아이디/비번 input + 로그인버튼 + 자동로그인 + 정보찾기/회원가입 -->
+</div>
 
 </aside>
 
@@ -197,6 +195,7 @@
 
 </body>
 </html>
+
 
 
 
