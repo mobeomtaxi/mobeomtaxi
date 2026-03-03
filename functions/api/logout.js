@@ -34,30 +34,26 @@ export async function onRequestPost({ request, env }) {
 
     // 새 세션 생성
     const sessionId = crypto.randomUUID();
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7일
-    const expiresIso = expiresAt.toISOString();
-
-    await env.DB.prepare(
-      `INSERT INTO sessions (id, user_id, expires_at) VALUES (?, ?, ?)`
-    )
-      .bind(sessionId, user.id, expiresIso)
-      .run();
+   await env.DB.prepare(`
+  INSERT INTO sessions (id, user_id, created_at, expires_at)
+  VALUES (?, ?, datetime('now'), datetime('now', '+7 days'))
+`).bind(sessionId, user.id).run();
 
     const headers = new Headers({ "Content-Type": "application/json; charset=utf-8" });
 
     // ✅ Pages(https)에서는 Secure OK
     // ✅ 같은 도메인에서 fetch(credentials: "include")면 SameSite=Lax로도 쿠키 전송됨
-    headers.append(
-      "Set-Cookie",
-      [
-        `session_id=${encodeURIComponent(sessionId)}`,
-        "Path=/",
-        `Expires=${expiresAt.toUTCString()}`,
-        "HttpOnly",
-        "Secure",
-        "SameSite=Lax",
-      ].join("; ")
-    );
+headers.append(
+  "Set-Cookie",
+  [
+    `session_id=${encodeURIComponent(sessionId)}`,
+    "Path=/",
+    `Max-Age=${60 * 60 * 24 * 7}`,
+    "HttpOnly",
+    "Secure",
+    "SameSite=Lax",
+  ].join("; ")
+);
 
     // 프론트 편의용 응답
     return new Response(
