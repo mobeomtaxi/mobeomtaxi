@@ -237,3 +237,50 @@ body{background:var(--bg);color:var(--text);}
   .row2{grid-template-columns:1fr;}
   .grid-ads{grid-template-columns:1fr;}
 }
+
+/* ===== 메인 포털 레이아웃 ===== */
+
+.portal{
+  width:1200px;
+  margin:20px auto;
+  display:grid;
+  grid-template-columns:260px 1fr 260px;
+  gap:20px;
+}
+
+.left{
+}
+
+.center{
+}
+
+.right{
+}
+
+/* 광고 */
+.side-ad{
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:12px;
+  height:300px;
+  margin-bottom:20px;
+}
+
+/* 메인 배너 */
+.main-banner{
+  height:180px;
+  background:#111;
+  border-radius:12px;
+}
+
+.topbar{
+  background:#FFB121;
+  height:90px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.topbar img{
+  height:70px;
+}
