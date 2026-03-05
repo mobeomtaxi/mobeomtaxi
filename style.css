@@ -22,12 +22,12 @@ body{background:var(--bg);color:var(--text);}
   gap:18px;
 }
 .brand img{height:34px; width:auto; cursor:pointer; display:block;}
-.topmenu{display:flex; gap:16px; flex:1; align-items:center;}
+.topmenu{display:flex; gap:16px; flex:1; align-items:center; flex-wrap:wrap;}
 .topmenu a{
   text-decoration:none; color:#111; font-weight:900; padding:8px 10px; border-radius:10px;
 }
 .topmenu a:hover{background:var(--brand-soft);}
-.top-actions{display:flex; gap:10px; align-items:center;}
+.top-actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
 .mini-link{font-size:12px; color:#444; text-decoration:none;}
 .mini-link:hover{text-decoration:underline;}
 .brandline{height:4px; background:var(--brand);}
@@ -54,7 +54,7 @@ body{background:var(--bg);color:var(--text);}
   padding:10px 12px;
   font-weight:900;
   border-bottom:1px solid var(--line);
-  background:linear-gradient(0deg, #fff, #fff);
+  background:#fff;
   position:relative;
 }
 .card-head::before{
@@ -84,6 +84,7 @@ body{background:var(--bg);color:var(--text);}
   align-items:center;
   font-size:12px;
   color:var(--muted);
+  gap:10px;
 }
 .links a{color:#111; text-decoration:none;}
 .links a:hover{text-decoration:underline;}
@@ -186,7 +187,7 @@ body{background:var(--bg);color:var(--text);}
 .dot{display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--brand); margin-right:8px;}
 
 /* TABS */
-.tabs{display:flex; gap:6px; padding:10px 12px; border-bottom:1px solid var(--line); background:#fff;}
+.tabs{display:flex; gap:6px; padding:10px 12px; border-bottom:1px solid var(--line); background:#fff; flex-wrap:wrap;}
 .tab{
   border:1px solid var(--line);
   background:#fff;
@@ -233,54 +234,7 @@ body{background:var(--bg);color:var(--text);}
 .footer{max-width:1400px;margin:14px auto 30px; padding:0 18px; color:#777; font-size:12px; text-align:center;}
 
 @media (max-width:1100px){
-  .portal{grid-template-columns:1fr; }
+  .portal{grid-template-columns:1fr;}
   .row2{grid-template-columns:1fr;}
   .grid-ads{grid-template-columns:1fr;}
-}
-
-/* ===== 메인 포털 레이아웃 ===== */
-
-.portal{
-  width:1200px;
-  margin:20px auto;
-  display:grid;
-  grid-template-columns:260px 1fr 260px;
-  gap:20px;
-}
-
-.left{
-}
-
-.center{
-}
-
-.right{
-}
-
-/* 광고 */
-.side-ad{
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:12px;
-  height:300px;
-  margin-bottom:20px;
-}
-
-/* 메인 배너 */
-.main-banner{
-  height:180px;
-  background:#111;
-  border-radius:12px;
-}
-
-.topbar{
-  background:#FFB121;
-  height:90px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.topbar img{
-  height:70px;
 }
