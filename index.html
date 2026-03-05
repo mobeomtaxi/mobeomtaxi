@@ -2,12 +2,12 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>모범택시</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- index.html (레이아웃만 교체/추가) -->
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand" onclick="showPage('home')">
@@ -35,9 +35,9 @@
 <div class="portal">
   <!-- LEFT -->
   <aside class="col left">
-    <!-- 로그인/유저패널 (네가 이미 만든 loginForm/userPanel 그대로 넣기) -->
     <div class="card" id="loginWrap">
-      <!-- ✅ 기존 loginForm -->
+
+      <!-- ✅ 로그인 폼 -->
       <div id="loginForm" class="login-box">
         <div class="card-head">로그인</div>
 
@@ -47,13 +47,16 @@
 
         <div class="login-bottom">
           <label class="auto-login"><input type="checkbox"> 자동로그인</label>
-          <div class="links"><a href="#">정보찾기</a> · <a href="javascript:void(0)" onclick="openSignup()">회원가입</a></div>
+          <div class="links">
+            <a href="#">정보찾기</a> ·
+            <a href="javascript:void(0)" onclick="openSignup()">회원가입</a>
+          </div>
         </div>
 
         <div id="loginMsg" class="login-msg"></div>
       </div>
 
-      <!-- ✅ 기존 userPanel -->
+      <!-- ✅ 로그인 후 유저 패널 -->
       <div id="userPanel" style="display:none;">
         <div class="user-head">
           <div class="avatar"></div>
@@ -86,6 +89,7 @@
           <button class="icon-btn home" type="button" title="홈" onclick="showPage('home')">🏠</button>
         </div>
       </div>
+
     </div>
 
     <!-- 채팅 박스(샘플) -->
@@ -95,15 +99,17 @@
         <div class="chat-top">
           <span class="chip">👤 18601명</span>
           <div class="chat-icons">
-            <button class="mini-ico">👍</button>
-            <button class="mini-ico">✉️</button>
-            <button class="mini-ico">⚙️</button>
+            <button class="mini-ico" type="button">👍</button>
+            <button class="mini-ico" type="button">✉️</button>
+            <button class="mini-ico" type="button">⚙️</button>
           </div>
         </div>
+
         <div class="chat-body">
           <div class="chat-line"><b>관리자</b>: 매너채팅 부탁드립니다.</div>
           <div class="chat-line"><b>유저</b>: 오늘 픽 뭐임?</div>
         </div>
+
         <div class="chat-input">
           <input type="text" placeholder="메시지 입력" />
           <button class="btn brand sm" type="button">전송</button>
@@ -114,7 +120,6 @@
 
   <!-- CENTER -->
   <main class="col center">
-    <!-- 공지/업데이트 + 탭 -->
     <div class="row2">
       <div class="card">
         <div class="card-head">공지/업데이트</div>
@@ -140,7 +145,7 @@
       </div>
     </div>
 
-    <!-- 메인 영역(네 page/iframe 유지) -->
+    <!-- pages -->
     <section id="home" class="page active">
       <div class="hero black">메인 배너</div>
       <div class="grid-ads">
@@ -186,148 +191,15 @@
     <div class="card">
       <div class="card-head">바로가기</div>
       <div class="quick">
-        <button class="qbtn">먹튀신고</button>
-        <button class="qbtn">포인트교환</button>
-        <button class="qbtn">출석체크</button>
+        <button class="qbtn" type="button">먹튀신고</button>
+        <button class="qbtn" type="button">포인트교환</button>
+        <button class="qbtn" type="button">출석체크</button>
       </div>
     </div>
   </aside>
 </div>
 
 <footer class="footer">© 2026 모범택시</footer>
-
-  <aside class="sidebar">
-
-    <!-- ✅ 로그인 폼 (로그아웃 상태에서만 보임) -->
-    <div id="loginForm" class="login-box">
-      <input id="loginUsername" type="text" placeholder="아이디" class="login-input" autocomplete="username">
-      <input id="loginPassword" type="password" placeholder="비밀번호" class="login-input" autocomplete="current-password">
-      <button class="login-btn" type="button" onclick="doLogin()">로그인</button>
-
-      <div class="login-bottom">
-        <label class="auto-login">
-          <input type="checkbox"> 자동로그인
-        </label>
-        <div class="links">
-          <a href="#">정보찾기</a> · <a href="javascript:void(0)" onclick="openSignup()">회원가입</a>
-        </div>
-      </div>
-
-      <div id="loginMsg" class="login-msg"></div>
-    </div>
-
-   <!-- ✅ 로그인 후 유저 패널 -->
-<div id="userPanel" class="user-panel" style="display:none; margin-top:12px;">
-  <div class="user-top">
-    <div class="avatar"></div>
-
-    <div class="user-meta">
-      <div class="user-name-row">
-        <div id="userNick" class="user-nick">-</div>
-      </div>
-      <div id="userIdText" class="user-id">-</div>
-    </div>
-
-    <button class="logout-mini" type="button" onclick="doLogout()">로그아웃</button>
-  </div>
-
-  <div class="user-stats">
-    <div class="stat">
-      <div class="stat-label">회원등급</div>
-      <div id="userLevel" class="stat-value">일반회원</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">포인트</div>
-      <div class="stat-value"><span class="coin">🪙</span> <span id="userPoint">0</span></div>
-    </div>
-  </div>
-
-  <div class="user-icons">
-    <button class="icon-btn" type="button" title="알림">🔔</button>
-    <button class="icon-btn" type="button" title="쪽지">✉️</button>
-    <button class="icon-btn" type="button" title="마이">👤</button>
-    <button class="icon-btn" type="button" title="설정">⚙️</button>
-    <button class="icon-btn home" type="button" title="홈" onclick="showPage('home')">🏠</button>
-  </div>
-</div>
-  </aside>
-
-  <main class="main">
-
-    <section id="home" class="page active">
-      <div class="banner-grid">
-        <div class="banner">광고 문의 TG: MOBEOM_TAXI</div>
-        <div class="banner">광고 문의 TG: MOBEOM_TAXI</div>
-        <div class="banner">광고 문의 TG: MOBEOM_TAXI</div>
-        <div class="banner">광고 문의 TG: MOBEOM_TAXI</div>
-        <div class="banner">광고 문의 TG: MOBEOM_TAXI</div>
-        <div class="banner">광고 문의 TG: MOBEOM_TAXI</div>
-        <div class="banner">광고 문의 TG: MOBEOM_TAXI</div>
-        <div class="banner">광고 문의 TG: MOBEOM_TAXI</div>
-        <div class="banner">광고 문의 TG: MOBEOM_TAXI</div>
-      </div>
-    </section>
-
-    <section id="sports" class="page">
-      <h2>스포츠 양빵 계산기</h2>
-      <div class="iframe-wrap">
-        <iframe src="sports_betting_calculator.html" title="스포츠 양빵 계산기"></iframe>
-      </div>
-    </section>
-
-    <section id="race" class="page">
-      <h2>365 개경주 양빵 계산기</h2>
-      <div class="iframe-wrap">
-        <iframe src="개경주 양빵.html" title="개경주 양빵 계산기"></iframe>
-      </div>
-    </section>
-
-    <section id="verify" class="page">
-      <h2>검증 완료 사이트</h2>
-      <div class="iframe-wrap">
-        <iframe src="verify_sites.html" title="검증 완료 사이트"></iframe>
-      </div>
-    </section>
-
-    <section id="report" class="page">
-      <h2>먹튀제보</h2>
-      <div class="iframe-wrap">
-        <iframe src="report.html" title="먹튀제보"></iframe>
-      </div>
-    </section>
-
-    <section id="freeboard" class="page">
-      <h2>자유게시판</h2>
-      <div class="iframe-wrap">
-        <iframe src="freeboard.html" title="자유게시판"></iframe>
-      </div>
-    </section>
-
-    <section id="reviewboard" class="page">
-      <h2>후기게시판</h2>
-      <div class="iframe-wrap">
-        <iframe src="reviewboard.html" title="후기게시판"></iframe>
-      </div>
-    </section>
-
-    <section id="humorboard" class="page">
-      <h2>유머게시판</h2>
-      <div class="iframe-wrap">
-        <iframe src="humorboard.html" title="유머게시판"></iframe>
-      </div>
-    </section>
-
-    <section id="analysis" class="page">
-      <h2>분석 게시판</h2>
-      <div class="iframe-wrap">
-        <iframe src="analysisboard.html" title="분석 게시판"></iframe>
-      </div>
-    </section>
-
-  </main>
-</div>
-
-<footer class="site-footer">© 2026 모범택시 · All rights reserved.</footer>
 
 <script src="script.js"></script>
 
@@ -347,7 +219,3 @@
 
 </body>
 </html>
-
-
-
-
