@@ -7,46 +7,194 @@
 </head>
 <body>
 
-<header class="site-header">
+<!-- index.html (레이아웃만 교체/추가) -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand" onclick="showPage('home')">
+      <img src="모범택시 로고.png" alt="모범택시" />
+    </div>
 
-  <div class="logo" onclick="showPage('home')">
-    <img src="모범택시 로고.png" alt="모범택시 로고">
+    <nav class="topmenu">
+      <a href="#" onclick="showPage('home');return false;">홈</a>
+      <a href="#" onclick="showPage('sports');return false;">라이브스코어</a>
+      <a href="#" onclick="showPage('verify');return false;">검증</a>
+      <a href="#" onclick="showPage('freeboard');return false;">커뮤니티</a>
+      <a href="#" data-page="analysis">분석</a>
+      <a href="#" onclick="showPage('report');return false;">고객센터</a>
+    </nav>
+
+    <div class="top-actions">
+      <a class="mini-link" href="#">채팅방 이용방법</a>
+      <a class="mini-link" href="#">사이트 이용안내</a>
+    </div>
   </div>
 
-  <ul class="menu">
-
-    <li class="dropdown">
-      <a href="#" onclick="showPage('sports'); return false;">양빵 프로그램</a>
-      <div class="hover-zone"></div>
-      <ul class="submenu">
-        <li><a href="#" onclick="showPage('sports'); return false;">스포츠 양빵</a></li>
-        <li><a href="#" onclick="showPage('race'); return false;">365 개경주 양빵</a></li>
-      </ul>
-    </li>
-
-    <li><a href="#" onclick="showPage('verify'); return false;">검증 완료 사이트</a></li>
-    <li><a href="#" onclick="showPage('report'); return false;">먹튀제보</a></li>
-
-    <li class="dropdown">
-      <a href="#" onclick="showPage('freeboard'); return false;">커뮤니티</a>
-      <div class="hover-zone"></div>
-      <ul class="submenu">
-        <li><a href="#" onclick="showPage('freeboard'); return false;">자유게시판</a></li>
-        <li><a href="#" onclick="showPage('reviewboard'); return false;">후기 게시판</a></li>
-        <li><a href="#" onclick="showPage('humorboard'); return false;">유머 게시판</a></li>
-      </ul>
-    </li>
-
-    <!-- ✅ data-page 방식 -->
-    <li><a href="#" data-page="analysis">분석존</a></li>
-
-    <li><a href="#" onclick="showPage('home'); return false;">포인트 존</a></li>
-
-  </ul>
-
+  <div class="brandline"></div>
 </header>
 
-<div class="container">
+<div class="portal">
+  <!-- LEFT -->
+  <aside class="col left">
+    <!-- 로그인/유저패널 (네가 이미 만든 loginForm/userPanel 그대로 넣기) -->
+    <div class="card" id="loginWrap">
+      <!-- ✅ 기존 loginForm -->
+      <div id="loginForm" class="login-box">
+        <div class="card-head">로그인</div>
+
+        <input id="loginUsername" type="text" placeholder="아이디" class="login-input" autocomplete="username">
+        <input id="loginPassword" type="password" placeholder="비밀번호" class="login-input" autocomplete="current-password">
+        <button class="btn brand" type="button" onclick="doLogin()">로그인</button>
+
+        <div class="login-bottom">
+          <label class="auto-login"><input type="checkbox"> 자동로그인</label>
+          <div class="links"><a href="#">정보찾기</a> · <a href="javascript:void(0)" onclick="openSignup()">회원가입</a></div>
+        </div>
+
+        <div id="loginMsg" class="login-msg"></div>
+      </div>
+
+      <!-- ✅ 기존 userPanel -->
+      <div id="userPanel" style="display:none;">
+        <div class="user-head">
+          <div class="avatar"></div>
+          <div class="user-meta">
+            <div class="user-nick">
+              <span id="userNick">-</span>
+              <span class="badge">로그인</span>
+            </div>
+            <div class="user-id" id="userIdText">-</div>
+          </div>
+          <button class="btn ghost sm" type="button" onclick="doLogout()">로그아웃</button>
+        </div>
+
+        <div class="user-stats">
+          <div class="stat">
+            <div class="stat-label">회원등급</div>
+            <div class="stat-value" id="userLevel">일반회원</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">포인트</div>
+            <div class="stat-value"><span class="coin">🪙</span> <span id="userPoint">0</span></div>
+          </div>
+        </div>
+
+        <div class="icon-row">
+          <button class="icon-btn" type="button" title="알림">🔔</button>
+          <button class="icon-btn" type="button" title="쪽지">✉️</button>
+          <button class="icon-btn" type="button" title="마이">👤</button>
+          <button class="icon-btn" type="button" title="설정">⚙️</button>
+          <button class="icon-btn home" type="button" title="홈" onclick="showPage('home')">🏠</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 채팅 박스(샘플) -->
+    <div class="card">
+      <div class="card-head">스포츠채팅</div>
+      <div class="chat">
+        <div class="chat-top">
+          <span class="chip">👤 18601명</span>
+          <div class="chat-icons">
+            <button class="mini-ico">👍</button>
+            <button class="mini-ico">✉️</button>
+            <button class="mini-ico">⚙️</button>
+          </div>
+        </div>
+        <div class="chat-body">
+          <div class="chat-line"><b>관리자</b>: 매너채팅 부탁드립니다.</div>
+          <div class="chat-line"><b>유저</b>: 오늘 픽 뭐임?</div>
+        </div>
+        <div class="chat-input">
+          <input type="text" placeholder="메시지 입력" />
+          <button class="btn brand sm" type="button">전송</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CENTER -->
+  <main class="col center">
+    <!-- 공지/업데이트 + 탭 -->
+    <div class="row2">
+      <div class="card">
+        <div class="card-head">공지/업데이트</div>
+        <ul class="list">
+          <li><span class="dot"></span> 서비스 점검 안내</li>
+          <li><span class="dot"></span> 신규 이벤트 공지</li>
+          <li><span class="dot"></span> 이용약관 업데이트</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="tabs">
+          <button class="tab active" type="button">분석</button>
+          <button class="tab" type="button">결장</button>
+          <button class="tab" type="button">선발</button>
+          <button class="tab" type="button">커뮤니티</button>
+        </div>
+        <div class="tab-body">
+          <div class="post"><b>[축구]</b> 오늘 조합 추천</div>
+          <div class="post"><b>[농구]</b> NBA 픽 모음</div>
+          <div class="post"><b>[야구]</b> 선발 체크</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 메인 영역(네 page/iframe 유지) -->
+    <section id="home" class="page active">
+      <div class="hero black">메인 배너</div>
+      <div class="grid-ads">
+        <div class="adbox">배너</div>
+        <div class="adbox">배너</div>
+        <div class="adbox">배너</div>
+      </div>
+    </section>
+
+    <section id="sports" class="page">
+      <div class="page-head"><span class="bar"></span> 라이브스코어</div>
+      <div class="iframe-wrap"><iframe src="sports_betting_calculator.html"></iframe></div>
+    </section>
+
+    <section id="verify" class="page">
+      <div class="page-head"><span class="bar"></span> 검증</div>
+      <div class="iframe-wrap"><iframe src="verify_sites.html"></iframe></div>
+    </section>
+
+    <section id="freeboard" class="page">
+      <div class="page-head"><span class="bar"></span> 자유게시판</div>
+      <div class="iframe-wrap"><iframe src="freeboard.html"></iframe></div>
+    </section>
+
+    <section id="analysis" class="page">
+      <div class="page-head"><span class="bar"></span> 분석 게시판</div>
+      <div class="iframe-wrap"><iframe src="analysisboard.html"></iframe></div>
+    </section>
+
+    <section id="report" class="page">
+      <div class="page-head"><span class="bar"></span> 고객센터</div>
+      <div class="iframe-wrap"><iframe src="report.html"></iframe></div>
+    </section>
+  </main>
+
+  <!-- RIGHT -->
+  <aside class="col right">
+    <div class="card">
+      <div class="card-head">AD</div>
+      <div class="ad-rect">광고 영역</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">바로가기</div>
+      <div class="quick">
+        <button class="qbtn">먹튀신고</button>
+        <button class="qbtn">포인트교환</button>
+        <button class="qbtn">출석체크</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<footer class="footer">© 2026 모범택시</footer>
 
   <aside class="sidebar">
 
@@ -199,6 +347,7 @@
 
 </body>
 </html>
+
 
 
 
