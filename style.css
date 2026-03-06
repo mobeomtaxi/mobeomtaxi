@@ -238,3 +238,187 @@ body{background:var(--bg);color:var(--text);}
   .row2{grid-template-columns:1fr;}
   .grid-ads{grid-template-columns:1fr;}
 }
+
+/* ===== 태블릿 ===== */
+@media (max-width: 1024px){
+  .topbar-inner{
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .topmenu{
+    justify-content: center;
+  }
+
+  .top-actions{
+    width: 100%;
+    justify-content: center;
+  }
+
+  .portal{
+    grid-template-columns: 1fr;
+  }
+
+  .row2{
+    grid-template-columns: 1fr;
+  }
+
+  .grid-ads{
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .iframe-wrap iframe{
+    height: 640px;
+  }
+}
+
+/* ===== 모바일 ===== */
+@media (max-width: 768px){
+  body{
+    font-size: 14px;
+  }
+
+  .topbar-inner{
+    padding: 12px 14px;
+    gap: 12px;
+  }
+
+  .brand img{
+    height: 28px;
+  }
+
+  .topmenu{
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .topmenu a{
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+
+  .mini-link{
+    font-size: 11px;
+  }
+
+  .portal{
+    margin: 10px auto;
+    padding: 0 10px 14px;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .card{
+    border-radius: 10px;
+  }
+
+  .card-head{
+    font-size: 14px;
+    padding: 9px 10px;
+  }
+
+  .login-box,
+  #userPanel,
+  .chat,
+  .tab-body{
+    padding: 10px;
+  }
+
+  .login-input{
+    height: 46px;
+    font-size: 14px;
+  }
+
+  .btn{
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .btn.sm{
+    height: auto;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .login-bottom{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .user-head{
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .user-stats{
+    grid-template-columns: 1fr;
+  }
+
+  .icon-row{
+    flex-wrap: wrap;
+  }
+
+  .icon-btn{
+    min-width: 48px;
+  }
+
+  .tabs{
+    gap: 6px;
+  }
+
+  .tab{
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+
+  .grid-ads{
+    grid-template-columns: 1fr;
+  }
+
+  .hero{
+    height: 160px;
+    font-size: 18px;
+  }
+
+  .ad-rect{
+    height: 220px;
+  }
+
+  .iframe-wrap iframe{
+    height: 520px;
+  }
+
+  .footer{
+    font-size: 11px;
+    padding: 0 10px;
+  }
+}
+
+/* ===== 아주 작은 화면 ===== */
+@media (max-width: 480px){
+  .brand img{
+    height: 24px;
+  }
+
+  .topmenu{
+    gap: 4px;
+  }
+
+  .topmenu a{
+    font-size: 12px;
+    padding: 5px 6px;
+  }
+
+  .card-head{
+    font-size: 13px;
+  }
+
+  .hero{
+    height: 130px;
+  }
+
+  .iframe-wrap iframe{
+    height: 420px;
+  }
+}
