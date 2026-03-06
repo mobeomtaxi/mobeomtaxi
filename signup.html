@@ -1,441 +1,619 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>회원가입</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
-body{background:#fff;color:#111;padding:18px;}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>회원가입</title>
+  <style>
+    :root{
+      --brand:#FFB121;
+      --brand-soft:rgba(255,177,33,.16);
+      --line:#e5e7eb;
+      --text:#111827;
+      --muted:#6b7280;
+      --bg:#f5f6f8;
+      --card:#ffffff;
+    }
 
-.wrap{max-width:900px;margin:0 auto;}
-h2{font-size:20px;margin:6px 0 18px 0;}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
+    body{
+      background:var(--bg);
+      color:var(--text);
+    }
 
-.form{background:#fff;border-radius:12px;padding:18px;}
+    .topbar{
+      background:#fff;
+      border-bottom:4px solid var(--brand);
+    }
 
-.row{
-  display:grid;
-  grid-template-columns:140px 1fr;
-  gap:14px;
-  align-items:center;
-  margin-bottom:14px;
-}
+    .topbar-inner{
+      max-width:1200px;
+      margin:0 auto;
+      padding:18px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
 
-.label{font-weight:900;color:#333;}
-.req{color:#FFB121;margin-left:4px;font-weight:900;}
+    .topbar-inner img{
+      height:52px;
+      width:auto;
+      display:block;
+    }
 
-.control{display:flex;gap:10px;align-items:center;}
+    .signup-page{
+      max-width:1200px;
+      margin:30px auto 60px;
+      padding:0 20px;
+      display:grid;
+      grid-template-columns:280px 1fr;
+      gap:24px;
+    }
 
-input{
-  width:100%;
-  padding:12px 12px;
-  border:1px solid #cfd6df;
-  border-radius:10px;
-  font-size:14px;
-  outline:none;
-  background:#fff;
-}
-input:focus{border-color:#FFB121; box-shadow:0 0 0 3px rgba(255,177,33,0.18);}
+    .side-card,
+    .form-card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.04);
+    }
 
-.small{font-size:12px;color:#555;margin-top:6px;line-height:1.45;}
+    .side-card{
+      padding:18px;
+      height:fit-content;
+    }
 
-.btn{
-  padding:11px 12px;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:900;
-  border:1px solid #cfd6df;
-  background:#fff;
-  color:#111;
-  white-space:nowrap;
-}
-.btn.primary{background:#FFB121;border-color:#FFB121;}
-.btn.primary:hover{opacity:.92;}
-.btn:disabled{opacity:.55; cursor:not-allowed;}
+    .side-title{
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:12px;
+    }
 
-.msg{margin-top:6px;font-size:12px;font-weight:800;}
-.msg.ok{color:#2e7d32;}
-.msg.bad{color:#111; background:rgba(255,177,33,0.18); padding:6px 8px; border-radius:8px; display:inline-block;}
+    .side-text{
+      font-size:14px;
+      line-height:1.6;
+      color:#444;
+    }
 
-.hr{height:1px;background:#eee;margin:18px 0;}
+    .side-box{
+      margin-top:16px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:12px;
+      background:#fafafa;
+      font-size:13px;
+      color:#555;
+      line-height:1.6;
+    }
 
-.captcha-wrap{display:flex;gap:10px;align-items:center;}
-.captcha-box{
-  min-width:140px;
-  text-align:center;
-  font-size:28px;
-  font-weight:900;
-  letter-spacing:3px;
-  padding:10px 14px;
-  background:#f3f4f6;
-  border:1px solid #d7dde6;
-  border-radius:10px;
-  user-select:none;
-}
+    .form-card{
+      padding:28px 30px 34px;
+    }
 
-.footer-btn{margin-top:18px;}
-.footer-btn .big{
-  width:100%;
-  padding:16px;
-  border-radius:12px;
-  font-size:18px;
-  font-weight:900;
-  border:0;
-  background:#FFB121;
-  cursor:pointer;
-}
-.footer-btn .big:hover{opacity:.92;}
-.footer-btn .big:disabled{opacity:.55; cursor:not-allowed;}
+    .form-title{
+      font-size:32px;
+      font-weight:900;
+      margin-bottom:8px;
+      text-align:center;
+    }
 
-@media (max-width:720px){
-  .row{grid-template-columns:1fr; gap:6px;}
-}
-</style>
+    .form-sub{
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+      margin-bottom:28px;
+    }
+
+    .warn{
+      text-align:center;
+      color:#c62828;
+      font-size:14px;
+      font-weight:800;
+      margin:-8px 0 24px;
+    }
+
+    .section{
+      margin-bottom:24px;
+    }
+
+    .row{
+      margin-bottom:16px;
+    }
+
+    .label{
+      display:block;
+      font-size:14px;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .req{color:var(--brand);margin-left:4px;}
+
+    input{
+      width:100%;
+      height:52px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:0 14px;
+      font-size:15px;
+      outline:none;
+      background:#fff;
+    }
+
+    input:focus{
+      border-color:var(--brand);
+      box-shadow:0 0 0 4px var(--brand-soft);
+    }
+
+    .inline{
+      display:flex;
+      gap:10px;
+    }
+
+    .inline input{flex:1;}
+
+    .btn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:#111;
+      height:52px;
+      padding:0 18px;
+      border-radius:12px;
+      font-weight:900;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+
+    .btn:hover{opacity:.94;}
+
+    .btn.brand{
+      background:var(--brand);
+      border-color:var(--brand);
+      color:#fff;
+    }
+
+    .help{
+      margin-top:8px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .msg{
+      margin-top:8px;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .msg.ok{color:#2e7d32;}
+    .msg.bad{
+      color:#111;
+      background:var(--brand-soft);
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:10px;
+    }
+
+    .agree-wrap{
+      margin-top:8px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      overflow:hidden;
+    }
+
+    .agree-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      background:#fff;
+      font-size:14px;
+    }
+
+    .agree-row:last-child{border-bottom:none;}
+    .agree-left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .agree-left input{
+      width:18px;
+      height:18px;
+      box-shadow:none;
+    }
+
+    .view-link{
+      color:#666;
+      font-size:13px;
+      text-decoration:none;
+    }
+
+    .view-link:hover{text-decoration:underline;}
+
+    .submit-wrap{
+      margin-top:26px;
+    }
+
+    .submit-btn{
+      width:100%;
+      height:58px;
+      border:0;
+      border-radius:14px;
+      background:var(--brand);
+      color:#fff;
+      font-size:20px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .bottom-links{
+      margin-top:18px;
+      text-align:center;
+      font-size:13px;
+      color:#666;
+    }
+
+    .bottom-links a{
+      color:#444;
+      text-decoration:none;
+      margin:0 8px;
+    }
+
+    .bottom-links a:hover{text-decoration:underline;}
+
+    @media (max-width: 900px){
+      .signup-page{
+        grid-template-columns:1fr;
+      }
+      .form-card{
+        padding:22px 18px 28px;
+      }
+      .form-title{
+        font-size:26px;
+      }
+      .inline{
+        flex-direction:column;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <h2>회원가입</h2>
 
-  <div class="form">
-    <!-- 아이디 -->
-    <div class="row">
-      <div class="label">아이디 <span class="req">*</span></div>
-      <div>
-        <div class="control">
-          <input id="userId" type="text" placeholder="아이디" autocomplete="username"/>
-          <button id="checkBtn" class="btn" type="button" onclick="checkId()">중복체크</button>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html">
+        <img src="모범택시 로고.png" alt="모범택시 로고" />
+      </a>
+    </div>
+  </header>
+
+  <div class="signup-page">
+
+    <aside class="side-card">
+      <div class="side-title">회원가입 안내</div>
+      <div class="side-text">
+        안전하고 편리한 서비스 이용을 위해 회원가입을 진행해주세요.
+      </div>
+
+      <div class="side-box">
+        - 아이디/닉네임은 중복 확인 후 가입할 수 있습니다.<br />
+        - 비밀번호는 10자 이상 입력해주세요.<br />
+        - 휴대폰 인증은 현재 제외된 상태입니다.<br />
+        - 가입 후 바로 로그인 가능합니다.
+      </div>
+    </aside>
+
+    <main class="form-card">
+      <div class="form-title">회원가입</div>
+      <div class="form-sub">모범택시 회원가입 페이지</div>
+      <div class="warn">만 19세 미만 청소년은 가입이 불가합니다.</div>
+
+      <div class="section">
+        <div class="row">
+          <label class="label">아이디 <span class="req">*</span></label>
+          <div class="inline">
+            <input id="userId" type="text" placeholder="아이디" autocomplete="username" />
+            <button class="btn" type="button" onclick="checkId()">중복체크</button>
+          </div>
+          <div id="idMsg" class="msg"></div>
         </div>
-        <div id="idMsg" class="msg"></div>
-      </div>
-    </div>
 
-    <!-- 비번 -->
-    <div class="row">
-      <div class="label">비밀번호 <span class="req">*</span></div>
-      <div>
-        <input id="pw" type="password" placeholder="비밀번호" autocomplete="new-password"/>
-        <div class="small">비밀번호는 최소 <b>10자 이상</b> 입력하세요.</div>
-        <div id="pwMsg" class="msg"></div>
-      </div>
-    </div>
-
-    <!-- 비번확인 -->
-    <div class="row">
-      <div class="label">비밀번호 확인 <span class="req">*</span></div>
-      <div>
-        <input id="pw2" type="password" placeholder="비밀번호 확인" autocomplete="new-password"/>
-        <div id="pw2Msg" class="msg"></div>
-      </div>
-    </div>
-
-    <!-- 닉네임 (버튼 없이 자동 체크) -->
-    <div class="row">
-      <div class="label">닉네임 <span class="req">*</span></div>
-      <div>
-        <input id="nick" type="text" placeholder="닉네임" autocomplete="nickname"/>
-        <div class="small">공백없이 한글/영문/숫자만 입력 가능</div>
-        <div id="nickMsg" class="msg"></div>
-      </div>
-    </div>
-
-    <div class="hr"></div>
-
-    <!-- 이메일 -->
-    <div class="row">
-      <div class="label">이메일 <span class="req">*</span></div>
-      <div><input id="email" type="email" placeholder="이메일" /></div>
-    </div>
-
-    <!-- 휴대폰 -->
-    <div class="row">
-      <div class="label">휴대폰 <span class="req">*</span></div>
-      <div class="control">
-        <input id="phone" type="text" placeholder="휴대폰 번호(- 포함)" />
-        <button class="btn" type="button" onclick="alert('인증 기능은 추후 연결')">인증번호 발송</button>
-      </div>
-    </div>
-
-    <!-- 한줄소개 -->
-    <div class="row">
-      <div class="label">한줄 소개 <span class="req">*</span></div>
-      <div><input id="intro" type="text" placeholder="한줄 소개 (20자 이내)" maxlength="20" /></div>
-    </div>
-
-    <div class="hr"></div>
-
-    <!-- 추천인 -->
-    <div class="row">
-      <div class="label">추천인</div>
-      <div><input id="ref" type="text" placeholder="추천인 아이디(없으면 비워두세요)" /></div>
-    </div>
-
-    <!-- 캡차 -->
-    <div class="row">
-      <div class="label">자동등록방지 <span class="req">*</span></div>
-      <div>
-        <div class="captcha-wrap">
-          <div class="captcha-box" id="captchaText"></div>
-          <button class="btn" type="button" onclick="generateCaptcha()">↻</button>
+        <div class="row">
+          <label class="label">비밀번호 <span class="req">*</span></label>
+          <input id="pw" type="password" placeholder="비밀번호" autocomplete="new-password" />
+          <div class="help">비밀번호는 10자 이상 입력해주세요.</div>
+          <div id="pwMsg" class="msg"></div>
         </div>
-        <div style="margin-top:10px;">
-          <input id="captchaInput" type="text" placeholder="자동등록방지 문자 입력" />
-          <div id="captchaMsg" class="msg"></div>
+
+        <div class="row">
+          <label class="label">비밀번호 확인 <span class="req">*</span></label>
+          <input id="pw2" type="password" placeholder="비밀번호 확인" autocomplete="new-password" />
+          <div id="pw2Msg" class="msg"></div>
+        </div>
+
+        <div class="row">
+          <label class="label">닉네임 <span class="req">*</span></label>
+          <input id="nick" type="text" placeholder="닉네임" />
+          <div class="help">공백 없이 한글/영문/숫자만 입력 가능</div>
+          <div id="nickMsg" class="msg"></div>
+        </div>
+
+        <div class="row">
+          <label class="label">이메일 <span class="req">*</span></label>
+          <input id="email" type="email" placeholder="이메일 주소" />
+        </div>
+
+        <div class="row">
+          <label class="label">추천인</label>
+          <input id="ref" type="text" placeholder="추천인 아이디(없으면 비워두세요)" />
         </div>
       </div>
-    </div>
 
-    <div class="footer-btn">
-      <button id="submitBtn" class="big" type="button" onclick="submitSignup()">회원가입</button>
-      <div id="submitMsg" class="msg" style="margin-top:10px;"></div>
-    </div>
+      <div class="section">
+        <label class="label">이용약관 동의</label>
+
+        <div class="agree-wrap">
+          <div class="agree-row">
+            <div class="agree-left">
+              <input id="agreeAll" type="checkbox" />
+              <label for="agreeAll">전체 동의합니다.</label>
+            </div>
+          </div>
+
+          <div class="agree-row">
+            <div class="agree-left">
+              <input class="agree-item" id="agreeAge" type="checkbox" />
+              <label for="agreeAge">만 19세 이상입니다. (필수)</label>
+            </div>
+          </div>
+
+          <div class="agree-row">
+            <div class="agree-left">
+              <input class="agree-item" id="agreeTerms" type="checkbox" />
+              <label for="agreeTerms">이용약관 동의 (필수)</label>
+            </div>
+            <a href="#" class="view-link">내용보기</a>
+          </div>
+
+          <div class="agree-row">
+            <div class="agree-left">
+              <input class="agree-item" id="agreePrivacy" type="checkbox" />
+              <label for="agreePrivacy">개인정보 수집 및 이용동의 (필수)</label>
+            </div>
+            <a href="#" class="view-link">내용보기</a>
+          </div>
+
+          <div class="agree-row">
+            <div class="agree-left">
+              <input id="agreeMarketing" type="checkbox" />
+              <label for="agreeMarketing">마케팅 정보 수신 동의 (선택)</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="submit-wrap">
+        <button class="submit-btn" type="button" onclick="submitSignup()">회원가입</button>
+        <div id="submitMsg" class="msg" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="bottom-links">
+        <a href="index.html">로그인</a> |
+        <a href="#">아이디/비밀번호 찾기</a>
+      </div>
+    </main>
   </div>
-</div>
 
-<script>
-/** API base */
-const API = "/api";
+  <script>
+    const API = "/api";
 
-/** 공통 메시지 */
-function setMsg(el, text, type){
-  el.textContent = text || "";
-  el.className = "msg " + (type || "");
-}
+    function setMsg(el, text, type){
+      el.textContent = text || "";
+      el.className = "msg " + (type || "");
+    }
 
-/** 상태 */
-let idChecked = false;
-let idOk = false;
+    let idChecked = false;
+    let idOk = false;
+    let nickTimer = null;
+    let nickOk = false;
 
-let nickOk = false;          // ✅ 닉네임 중복 체크 결과
-let nickTimer = null;
-
-/** 아이디 입력 바꾸면 다시 체크 */
-document.getElementById("userId").addEventListener("input", ()=>{
-  idChecked = false;
-  idOk = false;
-  document.getElementById("idMsg").textContent = "";
-});
-
-/** 비밀번호 체크 */
-document.getElementById("pw").addEventListener("input", ()=>{
-  const pw = document.getElementById("pw").value;
-  const pwMsg = document.getElementById("pwMsg");
-  if(!pw) { pwMsg.textContent=""; return; }
-  if(pw.length < 10) setMsg(pwMsg, "비밀번호는 10자 이상이어야 합니다.", "bad");
-  else setMsg(pwMsg, "좋아요.", "ok");
-  checkPwMatch();
-});
-document.getElementById("pw2").addEventListener("input", checkPwMatch);
-
-function checkPwMatch(){
-  const pw = document.getElementById("pw").value;
-  const pw2 = document.getElementById("pw2").value;
-  const el = document.getElementById("pw2Msg");
-  if(!pw2){ el.textContent=""; return; }
-  if(pw !== pw2) setMsg(el, "비밀번호가 일치하지 않습니다.", "bad");
-  else setMsg(el, "비밀번호가 일치합니다.", "ok");
-}
-
-/** 캡차 */
-let captcha = "";
-function generateCaptcha(){
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ2345678923456789";
-  captcha = "";
-  for(let i=0;i<6;i++){
-    captcha += chars[Math.floor(Math.random()*chars.length)];
-  }
-  document.getElementById("captchaText").textContent = captcha;
-  document.getElementById("captchaInput").value = "";
-  document.getElementById("captchaMsg").textContent = "";
-}
-generateCaptcha();
-
-/** 아이디 중복체크: 서버 */
-async function checkId(){
-  const id = document.getElementById("userId").value.trim();
-  const msg = document.getElementById("idMsg");
-  const btn = document.getElementById("checkBtn");
-
-  idChecked = true;
-  idOk = false;
-
-  if(!id){
-    setMsg(msg, "아이디를 입력하세요.", "bad");
-    return;
-  }
-  if(id.length < 3){
-    setMsg(msg, "아이디는 3자 이상이어야 합니다.", "bad");
-    return;
-  }
-
-  btn.disabled = true;
-  setMsg(msg, "확인 중...", "");
-
-  try{
-    const r = await fetch(`${API}/check-username?username=${encodeURIComponent(id)}`, {
-      method: "GET",
-      headers: { "Accept": "application/json" }
+    document.getElementById("userId").addEventListener("input", ()=>{
+      idChecked = false;
+      idOk = false;
+      document.getElementById("idMsg").textContent = "";
     });
 
-    const data = await safeJson(r);
-    if(!r.ok){
-      setMsg(msg, data?.msg || "중복체크 실패", "bad");
-      return;
-    }
-
-    if(data && data.available === true){
-      idOk = true;
-      setMsg(msg, data.msg || "사용 가능한 아이디입니다.", "ok");
-    }else{
-      setMsg(msg, data.msg || "이미 사용 중인 아이디입니다.", "bad");
-    }
-  }catch(e){
-    setMsg(msg, "서버 응답 오류", "bad");
-  }finally{
-    btn.disabled = false;
-  }
-}
-
-/** 닉네임 자동 중복 체크(버튼 없음) */
-function normalizeNick(v){ return (v || "").trim(); }
-
-async function checkNicknameLive(){
-  const nick = normalizeNick(document.getElementById("nick").value);
-  const el = document.getElementById("nickMsg");
-
-  nickOk = false;
-
-  if(!nick){
-    setMsg(el, "", "");
-    return;
-  }
-  if(nick.length < 2){
-    setMsg(el, "닉네임은 2자 이상", "bad");
-    return;
-  }
-  if(!/^[A-Za-z0-9가-힣]+$/.test(nick)){
-    setMsg(el, "한글/영문/숫자만 가능", "bad");
-    return;
-  }
-
-  setMsg(el, "확인 중...", "");
-
-  try{
-    const r = await fetch(`${API}/check-nickname?nickname=${encodeURIComponent(nick)}`, {
-      method: "GET",
-      headers: { "Accept": "application/json" }
-    });
-    const data = await safeJson(r);
-
-    if(!r.ok){
-      setMsg(el, data?.msg || "닉네임 확인 실패", "bad");
-      nickOk = false;
-      return;
-    }
-
-    if(data?.available === true){
-      setMsg(el, "사용가능한 닉네임 입니다.", "ok");
-      nickOk = true;
-    }else{
-      setMsg(el, "사용중인 닉네임 입니다.", "bad");
-      nickOk = false;
-    }
-  }catch(e){
-    setMsg(el, "서버 응답 오류", "bad");
-    nickOk = false;
-  }
-}
-
-document.getElementById("nick").addEventListener("input", ()=>{
-  clearTimeout(nickTimer);
-  nickTimer = setTimeout(checkNicknameLive, 350);
-});
-
-/** 회원가입: 서버로 저장 */
-async function submitSignup(){
-  const id = document.getElementById("userId").value.trim();
-  const pw = document.getElementById("pw").value;
-  const pw2 = document.getElementById("pw2").value;
-  const nick = document.getElementById("nick").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const intro = document.getElementById("intro").value.trim();
-  const recommender = document.getElementById("ref").value.trim();
-  const cap = document.getElementById("captchaInput").value.trim().toUpperCase();
-
-  const capMsg = document.getElementById("captchaMsg");
-  const submitMsg = document.getElementById("submitMsg");
-  const submitBtn = document.getElementById("submitBtn");
-
-  setMsg(submitMsg, "", "");
-
-  if(!id){ alert("아이디를 입력하세요."); return; }
-  if(!idChecked || !idOk){ alert("아이디 중복체크를 완료하세요."); return; }
-
-  if(pw.length < 10){ alert("비밀번호는 10자 이상이어야 합니다."); return; }
-  if(pw !== pw2){ alert("비밀번호가 일치하지 않습니다."); return; }
-
-  if(!nick){ alert("닉네임을 입력하세요."); return; }
-  if(!nickOk){ alert("닉네임이 사용 가능한지 확인하세요."); return; }
-
-  if(!email){ alert("이메일을 입력하세요."); return; }
-  if(!phone){ alert("휴대폰 번호를 입력하세요."); return; }
-  if(!intro){ alert("한줄 소개를 입력하세요."); return; }
-
-  if(cap !== captcha){
-    setMsg(capMsg, "자동등록방지 문자가 올바르지 않습니다.", "bad");
-    generateCaptcha();
-    return;
-  }
-
-  submitBtn.disabled = true;
-  setMsg(submitMsg, "가입 처리 중...", "");
-
-  try{
-    const r = await fetch(`${API}/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify({
-        username: id,
-        password: pw,
-        nickname: nick,
-        email,
-        phone,
-        intro,
-        recommender
-      })
+    document.getElementById("pw").addEventListener("input", ()=>{
+      const pw = document.getElementById("pw").value;
+      const pwMsg = document.getElementById("pwMsg");
+      if(!pw) { pwMsg.textContent=""; return; }
+      if(pw.length < 10) setMsg(pwMsg, "비밀번호는 10자 이상이어야 합니다.", "bad");
+      else setMsg(pwMsg, "좋아요.", "ok");
+      checkPwMatch();
     });
 
-    const data = await safeJson(r);
+    document.getElementById("pw2").addEventListener("input", checkPwMatch);
 
-    if(!r.ok){
-      const more = data?.error ? `\n${data.error}` : "";
-      setMsg(submitMsg, (data?.msg || "회원가입 실패") + more, "bad");
-      if(r.status === 409){
-        idChecked = false; idOk = false;
+    function checkPwMatch(){
+      const pw = document.getElementById("pw").value;
+      const pw2 = document.getElementById("pw2").value;
+      const el = document.getElementById("pw2Msg");
+      if(!pw2){ el.textContent=""; return; }
+      if(pw !== pw2) setMsg(el, "비밀번호가 일치하지 않습니다.", "bad");
+      else setMsg(el, "비밀번호가 일치합니다.", "ok");
+    }
+
+    async function checkId(){
+      const id = document.getElementById("userId").value.trim();
+      const msg = document.getElementById("idMsg");
+
+      idChecked = true;
+      idOk = false;
+
+      if(!id){
+        setMsg(msg, "아이디를 입력하세요.", "bad");
+        return;
       }
-      return;
+      if(id.length < 3){
+        setMsg(msg, "아이디는 3자 이상이어야 합니다.", "bad");
+        return;
+      }
+
+      setMsg(msg, "확인 중...", "");
+
+      try{
+        const r = await fetch(`${API}/check-username?username=${encodeURIComponent(id)}`, {
+          method: "GET",
+          headers: { "Accept": "application/json" }
+        });
+
+        const data = await r.json().catch(() => null);
+
+        if(!r.ok){
+          setMsg(msg, data?.msg || "중복체크 실패", "bad");
+          return;
+        }
+
+        if(data && data.available === true){
+          idOk = true;
+          setMsg(msg, data.msg || "사용 가능한 아이디입니다.", "ok");
+        }else{
+          setMsg(msg, data.msg || "이미 사용 중인 아이디입니다.", "bad");
+        }
+      }catch(e){
+        setMsg(msg, "서버 응답 오류", "bad");
+      }
     }
 
-    setMsg(submitMsg, "회원가입 완료!", "ok");
+    async function checkNicknameLive() {
+      const nick = (document.getElementById("nick").value || "").trim();
+      const el = document.getElementById("nickMsg");
 
-    setTimeout(()=>{
-      if(window.parent && window.parent.closeSignup) window.parent.closeSignup();
-    }, 350);
+      nickOk = false;
 
-  }catch(e){
-    setMsg(submitMsg, "회원가입 실패(서버 응답 오류)", "bad");
-  }finally{
-    submitBtn.disabled = false;
-  }
-}
+      if (!nick) { el.textContent = ""; el.className = "msg"; return; }
+      if (nick.length < 2) { setMsg(el, "닉네임은 2자 이상", "bad"); return; }
+      if (!/^[A-Za-z0-9가-힣]+$/.test(nick)) { setMsg(el, "한글/영문/숫자만 가능", "bad"); return; }
 
-/** JSON 안전 파서 */
-async function safeJson(res){
-  try{ return await res.json(); }catch(e){ return null; }
-}
-</script>
+      setMsg(el, "확인 중...", "");
+
+      try {
+        const r = await fetch(`/api/check-nickname?nickname=${encodeURIComponent(nick)}`, {
+          method: "GET",
+          headers: { "Accept": "application/json" }
+        });
+
+        const data = await r.json().catch(() => ({}));
+
+        if (!r.ok) {
+          setMsg(el, data.msg || "닉네임 확인 실패", "bad");
+          nickOk = false;
+          return;
+        }
+
+        if (data.available === true) {
+          setMsg(el, data.msg || "사용 가능한 닉네임입니다.", "ok");
+          nickOk = true;
+        } else {
+          setMsg(el, data.msg || "이미 사용 중인 닉네임입니다.", "bad");
+          nickOk = false;
+        }
+      } catch (e) {
+        setMsg(el, "서버 응답 오류", "bad");
+        nickOk = false;
+      }
+    }
+
+    document.getElementById("nick").addEventListener("input", () => {
+      clearTimeout(nickTimer);
+      nickTimer = setTimeout(checkNicknameLive, 350);
+    });
+
+    const agreeAll = document.getElementById("agreeAll");
+    const agreeItems = document.querySelectorAll(".agree-item");
+
+    agreeAll.addEventListener("change", () => {
+      agreeItems.forEach(chk => chk.checked = agreeAll.checked);
+      document.getElementById("agreeMarketing").checked = agreeAll.checked;
+    });
+
+    agreeItems.forEach(chk => {
+      chk.addEventListener("change", () => {
+        const allRequiredChecked = [...agreeItems].every(el => el.checked);
+        const marketing = document.getElementById("agreeMarketing").checked;
+        agreeAll.checked = allRequiredChecked && marketing;
+      });
+    });
+
+    document.getElementById("agreeMarketing").addEventListener("change", () => {
+      const allRequiredChecked = [...agreeItems].every(el => el.checked);
+      agreeAll.checked = allRequiredChecked && document.getElementById("agreeMarketing").checked;
+    });
+
+    async function submitSignup(){
+      const id = document.getElementById("userId").value.trim();
+      const pw = document.getElementById("pw").value;
+      const pw2 = document.getElementById("pw2").value;
+      const nick = document.getElementById("nick").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const recommender = document.getElementById("ref").value.trim();
+
+      const submitMsg = document.getElementById("submitMsg");
+      setMsg(submitMsg, "", "");
+
+      if(!id) return alert("아이디를 입력하세요.");
+      if(!idChecked || !idOk) return alert("아이디 중복체크를 완료하세요.");
+      if(pw.length < 10) return alert("비밀번호는 10자 이상이어야 합니다.");
+      if(pw !== pw2) return alert("비밀번호가 일치하지 않습니다.");
+      if(!nick) return alert("닉네임을 입력하세요.");
+      if(!nickOk) return alert("닉네임이 사용 가능한지 확인하세요.");
+      if(!email) return alert("이메일을 입력하세요.");
+
+      if(!document.getElementById("agreeAge").checked) return alert("만 19세 이상 동의가 필요합니다.");
+      if(!document.getElementById("agreeTerms").checked) return alert("이용약관 동의가 필요합니다.");
+      if(!document.getElementById("agreePrivacy").checked) return alert("개인정보 수집 및 이용동의가 필요합니다.");
+
+      setMsg(submitMsg, "가입 처리 중...", "");
+
+      try{
+        const r = await fetch(`${API}/signup`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            username: id,
+            password: pw,
+            nickname: nick,
+            email,
+            phone: null,
+            intro: null,
+            recommender
+          })
+        });
+
+        const data = await r.json().catch(() => null);
+
+        if(!r.ok){
+          setMsg(submitMsg, data?.msg || "회원가입 실패", "bad");
+          return;
+        }
+
+        setMsg(submitMsg, "회원가입 완료! 로그인 페이지로 이동합니다.", "ok");
+
+        setTimeout(() => {
+          location.href = "index.html";
+        }, 1000);
+
+      }catch(e){
+        setMsg(submitMsg, "회원가입 실패(서버 응답 오류)", "bad");
+      }
+    }
+  </script>
 </body>
 </html>
