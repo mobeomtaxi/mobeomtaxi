@@ -480,3 +480,84 @@ body{background:var(--bg);color:var(--text);}
     height: 36px;
   }
 }
+
+/* ===== 모바일 상단 메뉴 강제 수정 ===== */
+@media (max-width: 768px){
+  .topbar{
+    position: static !important;
+  }
+
+  .topbar-inner{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    padding: 14px 12px !important;
+  }
+
+  .brand{
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .brand img{
+    height: 42px !important;
+    width: auto !important;
+    max-width: 220px !important;
+  }
+
+  .topmenu{
+    flex: none !important;
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    align-items: stretch !important;
+    justify-items: stretch !important;
+  }
+
+  .topmenu a{
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    padding: 10px 6px !important;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+  }
+
+  .top-actions{
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .mini-link{
+    white-space: nowrap !important;
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 480px){
+  .topmenu{
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .topmenu a{
+    font-size: 13px !important;
+    padding: 9px 4px !important;
+  }
+
+  .brand img{
+    height: 36px !important;
+    max-width: 180px !important;
+  }
+}
