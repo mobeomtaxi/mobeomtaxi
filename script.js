@@ -25,25 +25,6 @@ document.addEventListener("click", (e) => {
 });
 
 /* =========================
-   회원가입 모달
-========================= */
-function openSignup() {
-  const modal = document.getElementById("signupModal");
-  const frame = document.getElementById("signupFrame");
-  if (frame) frame.src = "signup.html";
-  modal.style.display = "block";
-  modal.setAttribute("aria-hidden", "false");
-  document.body.style.overflow = "hidden";
-}
-
-function closeSignup() {
-  const modal = document.getElementById("signupModal");
-  modal.style.display = "none";
-  modal.setAttribute("aria-hidden", "true");
-  document.body.style.overflow = "";
-}
-
-/* =========================
    로그인/로그아웃 + UI 토글
    ✅ 네 HTML(id) 기준:
    - loginForm, loginUsername, loginPassword, loginMsg
@@ -243,4 +224,5 @@ window.addEventListener("load", async () => {
   bindLoginEvents();
   await refreshLoginUI(false);
 });
+
 
