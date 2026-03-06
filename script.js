@@ -215,16 +215,22 @@ async function refreshLoginUI(alertOn401 = false) {
 
 /** 로그아웃 */
 async function doLogout() {
-  try {
-    await fetch(`${API}/logout`, {
-      method: "POST",
-      credentials: "include",
-    });
-  } catch (e) {}
 
-  // ✅ 새로고침 없이도 완전 초기화(닉네임 남는 문제 해결)
+  const res = await fetch("/api/logout", {
+    method: "POST",
+    credentials: "include",
+    cache: "no-store",
+    headers: {
+      "Accept": "application/json"
+    }
+  }).catch(()=>null);
+
+  // UI 초기화
   showLoggedOutPanel();
   showPage("home");
+
+  // 세션 재확인
+  await refreshLoginUI(false);
 }
 
 /* =========================
@@ -237,3 +243,4 @@ window.addEventListener("load", async () => {
   bindLoginEvents();
   await refreshLoginUI(false);
 });
+
