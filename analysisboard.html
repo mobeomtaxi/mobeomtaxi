@@ -1,581 +1,211 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>분석게시판</title>
-<style>
-:root{
-  --brand:#FFB121;
-  --text:#111;
-  --muted:#666;
-  --line:#e6e6e6;
-  --bg:#ffffff;
-  --soft:#f7f7f7;
-}
 
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
-body{
-  background:transparent;      /* ✅ iframe에서도 깔끔 */
-  color:var(--text);
-  padding:0;
-}
+<link rel="stylesheet" href="analysis.css">
 
-.wrap{
-  max-width:none;
-  margin:0;
-  padding:0;
-}
-
-/* ✅ 카드(컨텐츠 전체) */
-.board-card{
-  background:#fff;
-  border-radius:12px;
-  padding:18px;
-}
-
-/* ====== 상단 배너 ====== */
-.hero{
-  border-radius:14px;
-  overflow:hidden;
-  position:relative;
-  background:
-    linear-gradient(90deg, rgba(0,0,0,0.35), rgba(0,0,0,0.10)),
-    url("analysis_hero.jpg"); /* 없으면 아래 fallback 배경 보임 */
-  background-size:cover;
-  background-position:center;
-  min-height:170px;
-}
-.hero.fallback{
-  background:
-    linear-gradient(90deg, rgba(0,0,0,0.35), rgba(0,0,0,0.10)),
-    radial-gradient(circle at 70% 30%, rgba(255,177,33,0.35), transparent 40%),
-    linear-gradient(135deg, #3a3a3a, #101010);
-}
-.hero-inner{
-  padding:22px 22px 18px 22px;
-  color:#fff;
-}
-.hero-title{
-  font-size:28px;
-  font-weight:900;
-  letter-spacing:-0.3px;
-}
-.hero-desc{
-  margin-top:8px;
-  font-size:13px;
-  line-height:1.55;
-  color:rgba(255,255,255,0.9);
-  max-width:760px;
-}
-
-/* ====== 카테고리 탭 + 상단 액션 ====== */
-.topbar{
-  margin-top:14px;
-  display:flex;
-  gap:12px;
-  align-items:flex-end;
-  justify-content:space-between;
-  flex-wrap:wrap;
-}
-
-.tabs{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.tab{
-  border:1px solid #ddd;
-  background:#fff;
-  padding:8px 12px;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:900;
-  font-size:13px;
-  color:#111;
-}
-.tab.active{
-  border-color:var(--brand);
-  background:rgba(255,177,33,0.18);
-}
-
-.actions{
-  display:flex;
-  gap:8px;
-  align-items:center;
-}
-.search{
-  display:flex;
-  gap:8px;
-  align-items:center;
-}
-.search input{
-  width:min(320px, 60vw);
-  padding:9px 10px;
-  border:1px solid #ddd;
-  border-radius:10px;
-  outline:none;
-}
-.search input:focus{
-  border-color:var(--brand);
-  box-shadow:0 0 0 3px rgba(255,177,33,0.18);
-}
-.btn{
-  border:1px solid #ddd;
-  background:#fff;
-  padding:9px 12px;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:900;
-}
-.btn.primary{
-  border-color:var(--brand);
-  background:var(--brand);
-  color:#111;
-}
-.btn.primary:hover{opacity:.92}
-
-/* ====== 리스트 헤더(전체/페이지) ====== */
-.meta{
-  margin-top:10px;
-  font-size:13px;
-  color:#333;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.meta b{color:#111}
-
-/* ====== 테이블 ====== */
-.table-wrap{
-  margin-top:10px;
-  border:1px solid #ddd;
-  border-radius:12px;
-  overflow:hidden;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:14px;
-}
-thead{
-  background:#fafafa;
-  border-top:3px solid var(--brand);
-  border-bottom:2px solid var(--brand);
-}
-th, td{
-  padding:12px 10px;
-  border-bottom:1px solid var(--line);
-  text-align:left;
-  vertical-align:middle;
-}
-tbody tr:hover{background:#fff7e6;}
-
-.badge{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:4px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:900;
-  border:1px solid transparent;
-  white-space:nowrap;
-}
-.badge.notice{
-  background:rgba(255,177,33,0.18);
-  border-color:var(--brand);
-  color:#111;
-}
-.badge.hot{
-  background:rgba(0,0,0,0.06);
-  border-color:#bbb;
-  color:#111;
-}
-
-.title{
-  font-weight:900;
-  cursor:pointer;
-}
-.title small{
-  color:var(--brand);
-  font-weight:900;
-  margin-left:6px;
-}
-.user{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.avatar{
-  width:22px;height:22px;border-radius:50%;
-  background:linear-gradient(135deg,#ddd,#bbb);
-  display:inline-block;
-}
-
-/* ====== 페이지네이션 ====== */
-.pager{
-  margin-top:14px;
-  display:flex;
-  justify-content:center;
-  gap:6px;
-  flex-wrap:wrap;
-}
-.pg{
-  padding:8px 12px;
-  border:1px solid #ddd;
-  border-radius:10px;
-  background:#fff;
-  cursor:pointer;
-  font-weight:900;
-}
-.pg.active{
-  background:var(--brand);
-  border-color:var(--brand);
-}
-
-/* ====== 하단 안내 섹션 ====== */
-.info{
-  margin-top:18px;
-  border:1px solid #ddd;
-  border-radius:14px;
-  overflow:hidden;
-  background:#fff;
-}
-.info-hero{
-  padding:18px;
-  background:
-    linear-gradient(90deg, rgba(0,0,0,0.55), rgba(0,0,0,0.15)),
-    url("analysis_info.jpg");
-  background-size:cover;
-  background-position:center;
-  color:#fff;
-}
-.info-hero.fallback{
-  background:
-    linear-gradient(90deg, rgba(0,0,0,0.55), rgba(0,0,0,0.15)),
-    linear-gradient(135deg, #1f2937, #0b1220);
-}
-.info-hero h3{
-  font-size:22px;
-  font-weight:900;
-}
-.info-hero p{
-  margin-top:8px;
-  font-size:13px;
-  line-height:1.55;
-  color:rgba(255,255,255,0.9);
-  max-width:820px;
-}
-
-.section{
-  padding:16px 18px;
-}
-.section-title{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 14px;
-  border-radius:999px;
-  font-weight:900;
-  margin-bottom:12px;
-  color:#111;
-}
-.section-title.use{
-  background:rgba(255,177,33,0.22);
-  border:1px solid var(--brand);
-}
-.section-title.warn{
-  background:var(--brand);            /* ✅ 빨강 대신 브랜드색 */
-  color:#111;
-}
-
-.rules{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:12px;
-}
-
-.rule{
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
-  padding:12px;
-  border:1px solid #eee;
-  border-radius:12px;
-  background:#fff;
-}
-.num{
-  width:30px;height:30px;border-radius:999px;
-  background:rgba(255,177,33,0.22);
-  border:1px solid var(--brand);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:900;
-}
-.rule h4{
-  font-size:14px;
-  font-weight:900;
-}
-.rule p{
-  margin-top:6px;
-  font-size:13px;
-  color:#333;
-  line-height:1.55;
-}
-
-@media (max-width:720px){
-  .hero-title{font-size:22px;}
-  .search input{width:72vw;}
-}
-</style>
 </head>
 
 <body>
+
 <div class="wrap">
-  <div class="board-card">
+<div class="board-card">
 
-    <!-- ✅ 상단 배너 (이미지 없으면 fallback 사용) -->
-    <div id="hero" class="hero fallback">
-      <div class="hero-inner">
-        <div class="hero-title">오늘은 나도 스포츠분석가!</div>
-        <div class="hero-desc">
-          멋지게 분석한 스포츠경기를 회원들과 공유해보세요!<br>
-          정확한 정보 공유로 더 많은 사람들에게 도움이 되는 게시판입니다.
-        </div>
-      </div>
-    </div>
+<!-- 상단 배너 -->
+<div id="hero" class="hero fallback">
+<div class="hero-inner">
 
-    <!-- 탭 + 검색/버튼 -->
-    <div class="topbar">
-      <div class="tabs" id="tabs">
-        <button class="tab active" data-cat="all" type="button">전체</button>
-        <button class="tab" data-cat="soccer" type="button">축구</button>
-        <button class="tab" data-cat="baseball" type="button">야구</button>
-        <button class="tab" data-cat="basketball" type="button">농구</button>
-        <button class="tab" data-cat="volleyball" type="button">배구</button>
-        <button class="tab" data-cat="hockey" type="button">하키</button>
-        <button class="tab" data-cat="etc" type="button">기타</button>
-      </div>
+<div class="hero-title">
+오늘은 나도 스포츠분석가!
+</div>
 
-      <div class="actions">
-        <div class="search">
-          <input id="q" type="text" placeholder="제목/작성자/내용 검색" />
-          <button class="btn primary" type="button" onclick="doSearch()">검색</button>
-        </div>
-        <button onclick="location.href='analysis-write.html'">글쓰기</button>
-      </div>
-    </div>
+<div class="hero-desc">
+멋지게 분석한 스포츠경기를 회원들과 공유해보세요!<br>
+정확한 정보 공유로 더 많은 사람들에게 도움이 되는 게시판입니다.
+</div>
 
-    <!-- meta -->
-    <div class="meta">
-      <div>전체 <b id="totalCount">9,102</b> / <b>1</b> 페이지</div>
-      <div style="color:#777;font-size:12px;">※ 데모 화면(프론트)</div>
-    </div>
+</div>
+</div>
 
-    <!-- 리스트 -->
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th style="width:90px;">번호</th>
-            <th>제목</th>
-            <th style="width:160px;">이름</th>
-            <th style="width:110px;">날짜</th>
-            <th style="width:80px;">조회</th>
-          </tr>
-        </thead>
-        <tbody id="tbody">
-          <tr data-cat="all">
-            <td><span class="badge notice">알림</span></td>
-            <td class="title">📌 스포츠 분석 게시판 관리 공지 <small>+45</small></td>
-            <td class="user"><span class="avatar"></span> 관리자</td>
-            <td>2023.12.01</td>
-            <td>8640</td>
-          </tr>
+<!-- 탭 + 검색 -->
+<div class="topbar">
 
-          <tr data-cat="basketball">
-            <td>9102</td>
-            <td class="title">🏀 2월 19일 KBL “고양소노 vs 서울삼성”</td>
-            <td class="user"><span class="avatar"></span> 스포츠팬</td>
-            <td>14:26</td>
-            <td>7</td>
-          </tr>
+<div class="tabs" id="tabs">
+<button class="tab active" data-cat="all">전체</button>
+<button class="tab" data-cat="soccer">축구</button>
+<button class="tab" data-cat="baseball">야구</button>
+<button class="tab" data-cat="basketball">농구</button>
+<button class="tab" data-cat="volleyball">배구</button>
+<button class="tab" data-cat="hockey">하키</button>
+<button class="tab" data-cat="etc">기타</button>
+</div>
 
-          <tr data-cat="basketball">
-            <td>9101</td>
-            <td class="title">🏀 2월 19일 KBL “대구한국가스공사 vs 서울SK”</td>
-            <td class="user"><span class="avatar"></span> 스포츠팬</td>
-            <td>14:11</td>
-            <td>3</td>
-          </tr>
+<div class="actions">
 
-          <tr data-cat="basketball">
-            <td>9100</td>
-            <td class="title">🏀 2월 18일 KBL “안양 정관장 vs 울산 DB” <small>+2</small></td>
-            <td class="user"><span class="avatar"></span> 푸른야구</td>
-            <td>02.18</td>
-            <td>26</td>
-          </tr>
+<div class="search">
+<input id="q" type="text" placeholder="제목/작성자/내용 검색">
+<button class="btn primary" onclick="doSearch()">검색</button>
+</div>
 
-          <tr data-cat="soccer">
-            <td>9099</td>
-            <td class="title">⚽ 프리미어리그 오늘 라인업 체크 <small>+1</small></td>
-            <td class="user"><span class="avatar"></span> 세프</td>
-            <td>02.18</td>
-            <td>19</td>
-          </tr>
+<button class="btn primary"
+onclick="location.href='analysis-write.html'">
+글쓰기
+</button>
 
-          <tr data-cat="soccer">
-            <td>9098</td>
-            <td class="title">⚽ 챔스 16강 1차전 핵심 포인트 <small>+4</small></td>
-            <td class="user"><span class="avatar"></span> 세프</td>
-            <td>02.17</td>
-            <td>17</td>
-          </tr>
+</div>
+</div>
 
-          <tr data-cat="baseball">
-            <td>9097</td>
-            <td class="title">⚾ 시범경기 전력 체크 (타선/불펜) <small>+3</small></td>
-            <td class="user"><span class="avatar"></span> 김치</td>
-            <td>02.17</td>
-            <td>15</td>
-          </tr>
+<!-- meta -->
+<div class="meta">
+<div>전체 <b id="totalCount">9,102</b> / <b>1</b> 페이지</div>
+<div style="color:#777;font-size:12px;">※ 데모 화면(프론트)</div>
+</div>
 
-          <tr data-cat="etc">
-            <td>9096</td>
-            <td class="title">📌 분석글 작성 템플릿 공유합니다</td>
-            <td class="user"><span class="avatar"></span> 토토수험생</td>
-            <td>02.16</td>
-            <td>21</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+<!-- 게시판 -->
+<div class="table-wrap">
 
-    <!-- 페이지네이션 -->
-    <div class="pager">
-      <button class="pg" type="button">«</button>
-      <button class="pg active" type="button">1</button>
-      <button class="pg" type="button">2</button>
-      <button class="pg" type="button">3</button>
-      <button class="pg" type="button">4</button>
-      <button class="pg" type="button">5</button>
-      <button class="pg" type="button">»</button>
-    </div>
+<table>
 
-    <!-- 하단 이용방법/주의사항 -->
-    <div class="info">
+<thead>
+<tr>
+<th style="width:90px;">번호</th>
+<th>제목</th>
+<th style="width:160px;">이름</th>
+<th style="width:110px;">날짜</th>
+<th style="width:80px;">조회</th>
+</tr>
+</thead>
 
-      <div id="infoHero" class="info-hero fallback">
-        <h3>오늘은 나도 스포츠 분석가!</h3>
-        <p>
-          모범택시 이용자들과 좋은 정보를 공유하고, 건전한 커뮤니티 문화를 만들어가요.<br>
-          스포츠 분석은 누구나 작성할 수 있지만, 사실 기반의 정보 공유가 중요합니다.
-        </p>
-      </div>
+<tbody id="tbody">
 
-      <div class="section">
-        <div class="section-title use">스포츠 분석 게시판 이용방법</div>
+<tr data-cat="all">
+<td><span class="badge notice">알림</span></td>
+<td class="title">📌 스포츠 분석 게시판 관리 공지 <small>+45</small></td>
+<td class="user"><span class="avatar"></span> 관리자</td>
+<td>2023.12.01</td>
+<td>8640</td>
+</tr>
 
-        <div class="rules">
-          <div class="rule">
-            <div class="num">01</div>
-            <div>
-              <h4>종목에 맞는 카테고리 이용하기</h4>
-              <p>축구/야구/농구/배구 등 종목별 탭을 선택해 관련 분석글을 올려주세요.</p>
-            </div>
-          </div>
+<tr data-cat="basketball">
+<td>9102</td>
+<td class="title">🏀 2월 19일 KBL “고양소노 vs 서울삼성”</td>
+<td class="user"><span class="avatar"></span> 스포츠팬</td>
+<td>14:26</td>
+<td>7</td>
+</tr>
 
-          <div class="rule">
-            <div class="num">02</div>
-            <div>
-              <h4>구체적인 제목 사용하기</h4>
-              <p>대진(팀명), 리그, 경기시간 등 핵심 키워드를 제목에 포함하면 검색/열람이 편해집니다.</p>
-            </div>
-          </div>
+<tr data-cat="basketball">
+<td>9101</td>
+<td class="title">🏀 2월 19일 KBL “대구한국가스공사 vs 서울SK”</td>
+<td class="user"><span class="avatar"></span> 스포츠팬</td>
+<td>14:11</td>
+<td>3</td>
+</tr>
 
-          <div class="rule">
-            <div class="num">03</div>
-            <div>
-              <h4>쉬운 용어로 작성하기</h4>
-              <p>초보도 이해할 수 있도록 근거(부상/라인업/상대전적)를 간단히 정리해 주세요.</p>
-            </div>
-          </div>
-        </div>
-      </div>
+<tr data-cat="basketball">
+<td>9100</td>
+<td class="title">🏀 2월 18일 KBL “안양 정관장 vs 울산 DB” <small>+2</small></td>
+<td class="user"><span class="avatar"></span> 푸른야구</td>
+<td>02.18</td>
+<td>26</td>
+</tr>
 
-      <div class="section">
-        <div class="section-title warn">스포츠 분석 게시판 주의사항</div>
+<tr data-cat="soccer">
+<td>9099</td>
+<td class="title">⚽ 프리미어리그 오늘 라인업 체크 <small>+1</small></td>
+<td class="user"><span class="avatar"></span> 세프</td>
+<td>02.18</td>
+<td>19</td>
+</tr>
 
-        <div class="rules">
-          <div class="rule">
-            <div class="num">01</div>
-            <div>
-              <h4>타 사이트/타인 비방 및 홍보 금지</h4>
-              <p>무분별한 홍보/도배는 제재될 수 있습니다.</p>
-            </div>
-          </div>
+<tr data-cat="soccer">
+<td>9098</td>
+<td class="title">⚽ 챔스 16강 1차전 핵심 포인트 <small>+4</small></td>
+<td class="user"><span class="avatar"></span> 세프</td>
+<td>02.17</td>
+<td>17</td>
+</tr>
 
-          <div class="rule">
-            <div class="num">02</div>
-            <div>
-              <h4>허위 정보·과장된 내용 금지</h4>
-              <p>근거 없는 단정/날조는 이용 제한 대상이 될 수 있습니다.</p>
-            </div>
-          </div>
+<tr data-cat="baseball">
+<td>9097</td>
+<td class="title">⚾ 시범경기 전력 체크 (타선/불펜) <small>+3</small></td>
+<td class="user"><span class="avatar"></span> 김치</td>
+<td>02.17</td>
+<td>15</td>
+</tr>
 
-          <div class="rule">
-            <div class="num">03</div>
-            <div>
-              <h4>욕설/비하/분쟁 유발 금지</h4>
-              <p>커뮤니티 분위기를 해치는 행위는 삭제/제재될 수 있습니다.</p>
-            </div>
-          </div>
-        </div>
-      </div>
+<tr data-cat="etc">
+<td>9096</td>
+<td class="title">📌 분석글 작성 템플릿 공유합니다</td>
+<td class="user"><span class="avatar"></span> 토토수험생</td>
+<td>02.16</td>
+<td>21</td>
+</tr>
 
-    </div>
+</tbody>
+</table>
 
-  </div>
+</div>
+
+<!-- 페이지 -->
+<div class="pager">
+<button class="pg">«</button>
+<button class="pg active">1</button>
+<button class="pg">2</button>
+<button class="pg">3</button>
+<button class="pg">4</button>
+<button class="pg">5</button>
+<button class="pg">»</button>
+</div>
+
+</div>
 </div>
 
 <script>
-/* 카테고리 필터(프론트 데모) */
+
+/* 카테고리 필터 */
 const tabs = document.getElementById('tabs');
 const tbody = document.getElementById('tbody');
 
-tabs.addEventListener('click', (e)=>{
-  const btn = e.target.closest('.tab');
-  if(!btn) return;
+tabs.addEventListener('click',(e)=>{
 
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
+const btn = e.target.closest('.tab');
+if(!btn) return;
 
-  const cat = btn.dataset.cat;
-  [...tbody.querySelectorAll('tr')].forEach(tr=>{
-    const rowCat = tr.getAttribute('data-cat') || 'all';
-    if(cat === 'all') tr.style.display = '';
-    else tr.style.display = (rowCat === cat) ? '' : 'none';
-  });
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+btn.classList.add('active');
+
+const cat = btn.dataset.cat;
+
+[...tbody.querySelectorAll('tr')].forEach(tr=>{
+
+const rowCat = tr.getAttribute('data-cat') || 'all';
+
+if(cat==="all") tr.style.display="";
+else tr.style.display=(rowCat===cat)?"":"none";
+
 });
 
+});
+
+/* 검색 */
 function doSearch(){
-  const q = document.getElementById('q').value.trim().toLowerCase();
-  [...tbody.querySelectorAll('tr')].forEach(tr=>{
-    const text = tr.innerText.toLowerCase();
-    tr.style.display = text.includes(q) ? '' : 'none';
-  });
+
+const q=document.getElementById('q').value.trim().toLowerCase();
+
+[...tbody.querySelectorAll('tr')].forEach(tr=>{
+
+const text=tr.innerText.toLowerCase();
+tr.style.display=text.includes(q)?"":"none";
+
+});
+
 }
 
-/* (선택) 이미지 파일이 없으면 fallback 유지:
-   analysis_hero.jpg / analysis_info.jpg 를 넣으면 자동으로 이미지 배경처럼 보임 */
 </script>
 
 </body>
 </html>
-
-
